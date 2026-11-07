@@ -175,9 +175,9 @@ Brak. Jeśli istnieje gałąź `master` z workflow, nie jest już wyzwalaczem; h
 
 #### Automated
 
-- [x] 2.1 Dokumentacja nie wspomina `master`
-- [x] 2.2 `AGENTS.md` i `CLAUDE.md` mają identyczną treść
-- [x] 2.3 Formatowanie dokumentów przechodzi
+- [x] 2.1 Dokumentacja nie wspomina `master` — b21d689
+- [x] 2.2 `AGENTS.md` i `CLAUDE.md` mają identyczną treść — b21d689
+- [x] 2.3 Formatowanie dokumentów przechodzi — b21d689
 
 #### Manual
 
