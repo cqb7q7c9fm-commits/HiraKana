@@ -60,8 +60,9 @@ Estymacja: 3 tygodnie pracy po godzinach (mieści się w budżecie czasu).
 ## Functional Requirements
 
 ### Authentication
-- FR-001: Użytkownik can zalogować się istniejącym kontem zewnętrznym (dostawcy — zob. Open Questions). Priority: must-have
-  > Socrates: Brak kontrargumentu; stoi tak, jak napisano.
+- FR-001: Użytkownik can założyć konto i zalogować się za pomocą adresu e-mail. Priority: must-have
+  > Socrates: Brak kontrargumentu; stoi tak, jak napisano. (Zmiana po rundzie wyzwań: logowanie e-mailem jest podstawą MVP; konto zewnętrzne wydzielone do FR-015 jako nice-to-have.)
+- FR-015: Użytkownik can zalogować się istniejącym kontem zewnętrznym (dostawcy — zob. Open Questions). Priority: nice-to-have
 
 ### Learning session
 - FR-002: Użytkownik can wybrać alfabet (hiragana lub katakana). Priority: must-have
@@ -107,7 +108,7 @@ Wejścia widoczne dla użytkownika: odpowiedzi w sesjach, wybrany alfabet, kieru
 
 ## Access Control
 
-Logowanie istniejącym kontem zewnętrznym (dostawcy — zob. Open Questions). Płaski model użytkowników — wszyscy równi, bez ról; każdy widzi tylko swoje wyniki. Wyniki są zapisywane na koncie użytkownika.
+Logowanie adresem e-mail (must-have); logowanie istniejącym kontem zewnętrznym jest nice-to-have (FR-015; dostawcy — zob. Open Questions). Płaski model użytkowników — wszyscy równi, bez ról; każdy widzi tylko swoje wyniki. Wyniki są zapisywane na koncie użytkownika.
 
 ## Non-Goals
 
@@ -118,7 +119,7 @@ Logowanie istniejącym kontem zewnętrznym (dostawcy — zob. Open Questions). P
 ## Open Questions
 
 1. **Mierzalne cele skali (`target_scale.qps`, `target_scale.data_volume`)** — nie ustalono; skala użytkowników: „tylko ja albo garstka osób”. Owner: użytkownik.
-2. **Dostawcy logowania** — użytkownik wskazał dwóch dostawców kont zewnętrznych (Apple i Google); decyzja o nazwach dostawców trafia do etapu wyboru stacku. Owner: użytkownik / tech-stack.
+2. **Dostawcy logowania (FR-015, nice-to-have)** — użytkownik wskazał dwóch dostawców kont zewnętrznych (Apple i Google); logowanie e-mailem jest podstawą MVP, a konta zewnętrzne dochodzą jako dodatek. Owner: użytkownik / tech-stack.
 3. **Mierzalny cel „płynnej reakcji”** (np. czas reakcji po wyborze opcji) — nierozstrzygnięte. Owner: użytkownik.
 4. **Zasady doboru 3 błędnych opcji w pytaniu** (losowe czy podobne znaki) — nierozstrzygnięte (FR-004). Owner: użytkownik.
 5. **Definicja „wyniku sesji”** widocznego dla użytkownika — nierozstrzygnięte (FR-007). Owner: użytkownik.
