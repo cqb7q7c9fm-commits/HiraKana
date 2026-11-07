@@ -160,24 +160,24 @@ Brak. Jeśli istnieje gałąź `master` z workflow, nie jest już wyzwalaczem; h
 
 #### Automated
 
-- [x] 1.1 Składnia YAML jest poprawna
-- [x] 1.2 Workflow nie zawiera odwołań do `master`
-- [x] 1.3 Oba joby używają `.nvmrc`
-- [x] 1.4 Linting przechodzi
-- [x] 1.5 Sprawdzenie typów przechodzi
-- [x] 1.6 Build przechodzi
+- [x] 1.1 Składnia YAML jest poprawna — 58a84af
+- [x] 1.2 Workflow nie zawiera odwołań do `master` — 58a84af
+- [x] 1.3 Oba joby używają `.nvmrc` — 58a84af
+- [x] 1.4 Linting przechodzi — 58a84af
+- [x] 1.5 Sprawdzenie typów przechodzi — 58a84af
+- [x] 1.6 Build przechodzi — 58a84af
 
 #### Manual
 
-- [x] 1.7 Diff zawiera wyłącznie zmiany wyzwalaczy i wersji Node; joby pozostają równoległe
+- [x] 1.7 Diff zawiera wyłącznie zmiany wyzwalaczy i wersji Node; joby pozostają równoległe — 58a84af
 
 ### Phase 2: Dokumentacja i kroki ręczne
 
 #### Automated
 
-- [ ] 2.1 Dokumentacja nie wspomina `master`
-- [ ] 2.2 `AGENTS.md` i `CLAUDE.md` mają identyczną treść
-- [ ] 2.3 Formatowanie dokumentów przechodzi
+- [x] 2.1 Dokumentacja nie wspomina `master`
+- [x] 2.2 `AGENTS.md` i `CLAUDE.md` mają identyczną treść
+- [x] 2.3 Formatowanie dokumentów przechodzi
 
 #### Manual
 

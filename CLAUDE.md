@@ -52,4 +52,9 @@ Full server-side rendering (`output: "server"` in astro.config.mjs). All pages a
 
 ## CI
 
-GitHub Actions workflow (`.github/workflows/ci.yml`) runs lint + build on every push and PR to master. Requires `SUPABASE_URL` and `SUPABASE_KEY` repository secrets for the build step.
+GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every push and PR to `main`, with Node taken from `.nvmrc`. Two jobs run in parallel:
+
+- `ci` — `astro sync`, `npm run lint`, `astro check`, `npm run build`. Requires `SUPABASE_URL` and `SUPABASE_KEY` repository secrets for the build step.
+- `smoke` — starts local Supabase, builds, serves the production preview and runs `npm run smoke`. Generates its own Supabase values, so it needs no repository secrets.
+
+Deployment is not part of CI.
