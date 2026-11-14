@@ -261,25 +261,25 @@ Pierwsza migracja w repozytorium; baza jest dziś pusta, więc brak danych do mi
 
 #### Automated
 
-- [x] 1.1 Migracja stosuje się na czystej bazie: `npx supabase db reset`
-- [x] 1.2 Sprawdzenie typów przechodzi: `npx astro check`
-- [x] 1.3 Linting przechodzi: `npm run lint`
+- [x] 1.1 Migracja stosuje się na czystej bazie: `npx supabase db reset` — e14e5e4
+- [x] 1.2 Sprawdzenie typów przechodzi: `npx astro check` — e14e5e4
+- [x] 1.3 Linting przechodzi: `npm run lint` — e14e5e4
 
 #### Manual
 
-- [x] 1.4 W Supabase Studio obie tabele mają włączone RLS i dokładnie wymienione polityki (bez delete)
+- [x] 1.4 W Supabase Studio obie tabele mają włączone RLS i dokładnie wymienione polityki (bez delete) — e14e5e4
 
 ### Phase 2: API zapisu i odczytu
 
 #### Automated
 
-- [ ] 2.1 Smoke (zapis, odczyt, 401/404/409/400, izolacja RLS) przechodzi na działającym serwerze z lokalnym Supabase: `npm run smoke`
-- [ ] 2.2 Build produkcyjny przechodzi: `npm run build`
-- [ ] 2.3 Linting i typy przechodzą: `npm run lint && npx astro check`
+- [x] 2.1 Smoke (zapis, odczyt, 401/404/409/400, izolacja RLS) przechodzi na działającym serwerze z lokalnym Supabase: `npm run smoke`
+- [x] 2.2 Build produkcyjny przechodzi: `npm run build`
+- [x] 2.3 Linting i typy przechodzą: `npm run lint && npx astro check`
 
 #### Manual
 
-- [ ] 2.4 W Supabase Studio po smoke wiersze mają poprawne `user_id`, `direction`, `is_correct` i `score` ukończonej sesji
+- [x] 2.4 W Supabase Studio po smoke wiersze mają poprawne `user_id`, `direction`, `is_correct` i `score` ukończonej sesji
 
 ### Phase 3: Zapis w kliencie
 
