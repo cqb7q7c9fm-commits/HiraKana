@@ -1,19 +1,44 @@
 import { RotateCcw, Settings } from "lucide-react";
 import { useFocusOnChange } from "@/components/hooks/useFocusOnChange";
+import type { SyncStatus } from "@/components/hooks/useAnswerSync";
+import { SyncBanner } from "@/components/practice/SyncBanner";
 import { Button } from "@/components/ui/button";
-import type { Alphabet, AnswerRecord } from "@/types";
+import { KANA } from "@/lib/kana";
+import type { Alphabet, AnswerRecord, SessionResult } from "@/types";
 
 interface Props {
   alphabet: Alphabet;
   score: number;
   total: number;
   answers: AnswerRecord[];
+  result: SessionResult | null;
+  syncStatus: SyncStatus;
+  sessionExpired: boolean;
+  onRetry: () => void;
   onPracticeAgain: () => void;
   onChangeSettings: () => void;
 }
 
-export function SummaryStep({ alphabet, score, total, answers, onPracticeAgain, onChangeSettings }: Props) {
-  const wrong = answers.filter((a) => a.chosenIndex !== a.question.correctIndex);
+export function SummaryStep({
+  alphabet,
+  score,
+  total,
+  answers,
+  result,
+  syncStatus,
+  sessionExpired,
+  onRetry,
+  onPracticeAgain,
+  onChangeSettings,
+}: Props) {
+  // Saved result from the server when available; otherwise the local result.
+  const shownScore = result?.session.score ?? score;
+  const shownTotal = result?.session.total ?? total;
+  const wrong = result
+    ? result.mistakes.map((romaji) => ({ romaji, kana: KANA.find((entry) => entry.romaji === romaji)?.[alphabet] }))
+    : answers
+        .filter((a) => a.chosenIndex !== a.question.correctIndex)
+        .map(({ question }) => ({ romaji: question.entry.romaji, kana: question.entry[alphabet] }));
   const headingRef = useFocusOnChange<HTMLHeadingElement>(true);
 
   return (
@@ -27,8 +52,9 @@ export function SummaryStep({ alphabet, score, total, answers, onPracticeAgain, 
           Session complete
         </h1>
         <p className="mt-3 text-5xl font-bold text-white">
-          {score}/{total}
+          {shownScore}/{shownTotal}
         </p>
+        <SyncBanner status={syncStatus} sessionExpired={sessionExpired} onRetry={onRetry} className="mt-2" />
       </div>
 
       {wrong.length === 0 ? (
@@ -37,15 +63,15 @@ export function SummaryStep({ alphabet, score, total, answers, onPracticeAgain, 
         <div className="space-y-2">
           <h2 className="text-sm font-medium text-blue-100/80">Characters to review</h2>
           <ul className="space-y-2">
-            {wrong.map(({ question }) => (
+            {wrong.map(({ romaji, kana }) => (
               <li
-                key={question.entry.romaji}
+                key={romaji}
                 className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3"
               >
                 <span className="text-3xl" lang="ja">
-                  {question.entry[alphabet]}
+                  {kana}
                 </span>
-                <span className="text-lg text-blue-100/80">{question.entry.romaji}</span>
+                <span className="text-lg text-blue-100/80">{romaji}</span>
               </li>
             ))}
           </ul>

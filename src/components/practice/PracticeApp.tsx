@@ -1,6 +1,7 @@
 import { usePracticeSession } from "@/components/hooks/usePracticeSession";
 import { SetupStep } from "@/components/practice/SetupStep";
 import { QuestionStep } from "@/components/practice/QuestionStep";
+import { SyncBanner } from "@/components/practice/SyncBanner";
 import { SummaryStep } from "@/components/practice/SummaryStep";
 
 export default function PracticeApp() {
@@ -14,6 +15,10 @@ export default function PracticeApp() {
         score={session.score}
         total={session.questions.length}
         answers={session.answers}
+        result={session.result}
+        syncStatus={session.syncStatus}
+        sessionExpired={session.sessionExpired}
+        onRetry={session.retry}
         onPracticeAgain={session.startAgain}
         onChangeSettings={session.restart}
       />
@@ -22,16 +27,19 @@ export default function PracticeApp() {
 
   if ((session.step === "question" || session.step === "feedback") && question) {
     return (
-      <QuestionStep
-        question={question}
-        index={session.index}
-        total={session.questions.length}
-        direction={session.direction}
-        alphabet={session.alphabet}
-        selected={session.selected}
-        onAnswer={session.answer}
-        onNext={session.next}
-      />
+      <div className="space-y-4">
+        <QuestionStep
+          question={question}
+          index={session.index}
+          total={session.questions.length}
+          direction={session.direction}
+          alphabet={session.alphabet}
+          selected={session.selected}
+          onAnswer={session.answer}
+          onNext={session.next}
+        />
+        <SyncBanner status={session.syncStatus} sessionExpired={session.sessionExpired} onRetry={session.retry} />
+      </div>
     );
   }
 

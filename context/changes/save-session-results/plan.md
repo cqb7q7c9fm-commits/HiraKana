@@ -273,29 +273,29 @@ Pierwsza migracja w repozytorium; baza jest dziś pusta, więc brak danych do mi
 
 #### Automated
 
-- [x] 2.1 Smoke (zapis, odczyt, 401/404/409/400, izolacja RLS) przechodzi na działającym serwerze z lokalnym Supabase: `npm run smoke`
-- [x] 2.2 Build produkcyjny przechodzi: `npm run build`
-- [x] 2.3 Linting i typy przechodzą: `npm run lint && npx astro check`
+- [x] 2.1 Smoke (zapis, odczyt, 401/404/409/400, izolacja RLS) przechodzi na działającym serwerze z lokalnym Supabase: `npm run smoke` — 09fa9db
+- [x] 2.2 Build produkcyjny przechodzi: `npm run build` — 09fa9db
+- [x] 2.3 Linting i typy przechodzą: `npm run lint && npx astro check` — 09fa9db
 
 #### Manual
 
-- [x] 2.4 W Supabase Studio po smoke wiersze mają poprawne `user_id`, `direction`, `is_correct` i `score` ukończonej sesji
+- [x] 2.4 W Supabase Studio po smoke wiersze mają poprawne `user_id`, `direction`, `is_correct` i `score` ukończonej sesji — 09fa9db
 
 ### Phase 3: Zapis w kliencie
 
 #### Automated
 
-- [ ] 3.1 Niezmienniki sesji nadal przechodzą: `npm run check:session`
-- [ ] 3.2 Linting przechodzi: `npm run lint`
-- [ ] 3.3 Sprawdzenie typów przechodzi: `npx astro check`
-- [ ] 3.4 Build produkcyjny przechodzi: `npm run build`
+- [x] 3.1 Niezmienniki sesji nadal przechodzą: `npm run check:session`
+- [x] 3.2 Linting przechodzi: `npm run lint`
+- [x] 3.3 Sprawdzenie typów przechodzi: `npx astro check`
+- [x] 3.4 Build produkcyjny przechodzi: `npm run build`
 
 #### Manual
 
-- [ ] 3.5 Po pełnej sesji w Supabase Studio jest 10 odpowiedzi z poprawnymi `romaji`, kierunkiem i `is_correct` oraz sesja z `completed_at` i `score`
-- [ ] 3.6 Błędna odpowiedź ma w bazie `is_correct = false` i pojawia się na liście pomyłek w podsumowaniu
-- [ ] 3.7 Odłączenie sieci w trakcie sesji nie blokuje nauki, baner pokazuje „Not saved”, a po przywróceniu sieci i „Retry” zapisują się wszystkie odpowiedzi (bez duplikatów)
-- [ ] 3.8 Odświeżenie strony w połowie sesji zostawia sesję nieukończoną (`completed_at` pusty), a dotychczasowe odpowiedzi są w bazie
+- [x] 3.5 Po pełnej sesji w Supabase Studio jest 10 odpowiedzi z poprawnymi `romaji`, kierunkiem i `is_correct` oraz sesja z `completed_at` i `score`
+- [x] 3.6 Błędna odpowiedź ma w bazie `is_correct = false` i pojawia się na liście pomyłek w podsumowaniu
+- [x] 3.7 Odłączenie sieci w trakcie sesji nie blokuje nauki, baner pokazuje „Not saved”, a po przywróceniu sieci i „Retry” zapisują się wszystkie odpowiedzi (bez duplikatów)
+- [x] 3.8 Odświeżenie strony w połowie sesji zostawia sesję nieukończoną (`completed_at` pusty), a dotychczasowe odpowiedzi są w bazie
 
 ### Phase 4: Historia wyników
 
