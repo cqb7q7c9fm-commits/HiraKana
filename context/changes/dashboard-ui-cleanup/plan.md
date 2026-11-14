@@ -299,29 +299,29 @@ Phase 2 changes global token values. Rollback is reverting `global.css` and `Sub
 
 #### Automated
 
-- [x] 2.1 `context/changes/dashboard-ui-cleanup/tokens.md` exists and `global.css` contains a `Source:` comment next to the token block
-- [x] 2.2 `@utility bg-cosmic` body contains no hex literal (grep of its lines for `#[0-9a-fA-F]{3,8}` returns 0)
-- [x] 2.3 Hard-coded scan on `src/components/auth/SubmitButton.tsx` returns 0 lines
-- [x] 2.4 Linting, types and build pass: `npm run lint`, `npx astro check`, `npm run build`
+- [x] 2.1 `context/changes/dashboard-ui-cleanup/tokens.md` exists and `global.css` contains a `Source:` comment next to the token block — 7ebc262
+- [x] 2.2 `@utility bg-cosmic` body contains no hex literal (grep of its lines for `#[0-9a-fA-F]{3,8}` returns 0) — 7ebc262
+- [x] 2.3 Hard-coded scan on `src/components/auth/SubmitButton.tsx` returns 0 lines — 7ebc262
+- [x] 2.4 Linting, types and build pass: `npm run lint`, `npx astro check`, `npm run build` — 7ebc262
 
 #### Manual
 
-- [x] 2.5 Desktop and 390 px screenshots (before/after) of `/auth/signin`, `/auth/signup` and `/practice` show the same look to within the explained difference
-- [x] 2.6 The cosmic gradient background on `/`, `/mastery` and `/results` looks unchanged to the eye
+- [x] 2.5 Desktop and 390 px screenshots (before/after) of `/auth/signin`, `/auth/signup` and `/practice` show the same look to within the explained difference — 7ebc262
+- [x] 2.6 The cosmic gradient background on `/`, `/mastery` and `/results` looks unchanged to the eye — 7ebc262
 
 ### Phase 3: View — dashboard from tokens and components
 
 #### Automated
 
-- [ ] 3.1 Hard-coded scan on `src/pages/dashboard.astro` returns 0 lines (was 10)
-- [ ] 3.2 `dashboard.astro` imports `@/components/ui/button` and `@/components/ui/card`, and the text "only for authenticated users" is absent
-- [ ] 3.3 Linting, types and build pass: `npm run lint`, `npx astro check`, `npm run build`
+- [x] 3.1 Hard-coded scan on `src/pages/dashboard.astro` returns 0 lines (was 10)
+- [x] 3.2 `dashboard.astro` imports `@/components/ui/button` and `@/components/ui/card`, and the text "only for authenticated users" is absent
+- [x] 3.3 Linting, types and build pass: `npm run lint`, `npx astro check`, `npm run build`
 
 #### Manual
 
-- [ ] 3.4 Signed in, `/dashboard` at desktop and 390 px: "Start practice" reads as the primary action; each of the four links and Sign out works (Sign out lands on `/`)
-- [ ] 3.5 Keyboard Tab through all controls shows a visible ring on each, and tab order matches visual order
-- [ ] 3.6 Signed out, `/dashboard` redirects to `/auth/signin`
+- [x] 3.4 Signed in, `/dashboard` at desktop and 390 px: "Start practice" reads as the primary action; each of the four links and Sign out works (Sign out lands on `/`)
+- [x] 3.5 Keyboard Tab through all controls shows a visible ring on each, and tab order matches visual order
+- [x] 3.6 Signed out, `/dashboard` redirects to `/auth/signin`
 
 ### Phase 4: States and visual gate — kitchen sink
 
