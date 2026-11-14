@@ -181,6 +181,6 @@ Brak. Jeśli istnieje gałąź `master` z workflow, nie jest już wyzwalaczem; h
 
 #### Manual
 
-- [x] 2.4 Push do `main` uruchamia oba joby i oba są zielone
-- [x] 2.5 Pull request do `main` uruchamia oba joby
-- [x] 2.6 Branch protection na `main` wymaga jobów `ci` i `smoke`
+- [x] 2.4 Push do `main` uruchamia oba joby i oba są zielone — 1bb3f93
+- [x] 2.5 Pull request do `main` uruchamia oba joby — 1bb3f93
+- [x] 2.6 Branch protection na `main` wymaga jobów `ci` i `smoke` — 1bb3f93

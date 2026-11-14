@@ -1,9 +1,9 @@
 ---
 change_id: ci-on-main-branch
 title: Uruchamiaj CI na gałęzi main
-status: implementing
+status: implemented
 created: 2026-11-07
-updated: 2026-11-07
+updated: 2026-11-14
 archived_at: null
 ---
 
