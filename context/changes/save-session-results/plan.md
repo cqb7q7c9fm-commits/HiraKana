@@ -301,13 +301,13 @@ Pierwsza migracja w repozytorium; baza jest dziś pusta, więc brak danych do mi
 
 #### Automated
 
-- [x] 4.1 Smoke przechodzi na działającym serwerze: `npm run smoke`
-- [x] 4.2 Build produkcyjny przechodzi: `npm run build`
-- [x] 4.3 Linting i typy przechodzą: `npm run lint && npx astro check`
+- [x] 4.1 Smoke przechodzi na działającym serwerze: `npm run smoke` — dceee74
+- [x] 4.2 Build produkcyjny przechodzi: `npm run build` — dceee74
+- [x] 4.3 Linting i typy przechodzą: `npm run lint && npx astro check` — dceee74
 
 #### Manual
 
-- [x] 4.4 Lista pokazuje ukończone sesje od najnowszej, a nieukończone się nie pojawiają
-- [x] 4.5 Szczegół sesji pokazuje wynik i pomyłki zgodne z tym, co widział użytkownik po sesji
-- [x] 4.6 Na szerokości iPhone’a (≈390 px) i iPada (≈820 px) strony nie mają poziomego przewijania
-- [x] 4.7 Drugie konto nie widzi sesji pierwszego (ani na liście, ani przez bezpośredni adres)
+- [x] 4.4 Lista pokazuje ukończone sesje od najnowszej, a nieukończone się nie pojawiają — dceee74
+- [x] 4.5 Szczegół sesji pokazuje wynik i pomyłki zgodne z tym, co widział użytkownik po sesji — dceee74
+- [x] 4.6 Na szerokości iPhone’a (≈390 px) i iPada (≈820 px) strony nie mają poziomego przewijania — dceee74
+- [x] 4.7 Drugie konto nie widzi sesji pierwszego (ani na liście, ani przez bezpośredni adres) — dceee74

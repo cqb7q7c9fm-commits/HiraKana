@@ -1,7 +1,7 @@
 ---
 change_id: save-session-results
 title: Save session results
-status: implementing
+status: implemented
 created: 2026-11-14
 updated: 2026-11-14
 archived_at: null
