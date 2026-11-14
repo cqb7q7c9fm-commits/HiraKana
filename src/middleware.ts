@@ -1,10 +1,12 @@
 import { defineMiddleware } from "astro:middleware";
 import { createClient } from "@/lib/supabase";
 
+// /api/practice is intentionally not listed: its handlers answer 401 JSON (not a redirect), which the client relies on.
 const PROTECTED_ROUTES = ["/dashboard", "/practice", "/results"];
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const supabase = createClient(context.request.headers, context.cookies);
+  context.locals.supabase = supabase;
 
   if (supabase) {
     const {

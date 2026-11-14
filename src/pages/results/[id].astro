@@ -1,13 +1,15 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { KANA } from "@/lib/kana";
-import { createClient } from "@/lib/supabase";
 import { getResult } from "@/lib/services/session-store";
 import { formatSessionDate, DIRECTION_LABELS, ALPHABET_LABELS } from "@/lib/results-format";
 
 const user = Astro.locals.user;
-const supabase = createClient(Astro.request.headers, Astro.cookies);
-const result = user && supabase && Astro.params.id ? await getResult(supabase, user.id, Astro.params.id) : null;
+const supabase = Astro.locals.supabase;
+if (!user || !supabase) {
+  return new Response("Supabase is not configured", { status: 500 });
+}
+const result = Astro.params.id ? await getResult(supabase, user.id, Astro.params.id) : null;
 
 if (!result) {
   Astro.response.status = 404;

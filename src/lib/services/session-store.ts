@@ -81,13 +81,28 @@ function toResult(session: SessionRow, answers: AnswerRow[]): SessionResult {
   };
 }
 
+/** Max sessions a user may start (and leave incomplete) within OPEN_SESSION_WINDOW_MS. */
+const OPEN_SESSION_LIMIT = 30;
+const OPEN_SESSION_WINDOW_MS = 60 * 60 * 1000;
+
+/** Returns the new session id, or null when the user left too many sessions open recently. */
 export async function createSession(
   supabase: SupabaseClient,
   userId: string,
   alphabet: Alphabet,
   direction: Direction,
   total: number,
-): Promise<string> {
+): Promise<string | null> {
+  const since = new Date(Date.now() - OPEN_SESSION_WINDOW_MS).toISOString();
+  const { count, error: countError } = await supabase
+    .from("practice_sessions")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", userId)
+    .is("completed_at", null)
+    .gte("created_at", since);
+  if (countError) throw new Error(`Failed to count open sessions: ${countError.message}`);
+  if ((count ?? 0) >= OPEN_SESSION_LIMIT) return null;
+
   const { data, error } = await supabase
     .from("practice_sessions")
     .insert({ user_id: userId, alphabet, direction, total })
@@ -103,6 +118,8 @@ export type SaveAnswerOutcome = "saved" | "not-found" | "out-of-range";
  * Idempotent per (session_id, position): the upsert uses ON CONFLICT DO NOTHING, so a retry never
  * duplicates or overwrites a row. DO NOTHING needs only the insert policy (no update policy exists
  * on session_answers) and no RETURNING, so no select policy is evaluated for the write either.
+ * First write wins: a retry that carries a different `romaji`/`isCorrect` for an already stored position is
+ * ignored and still answers 200 (the client queue only retries the same answer, so this is intended).
  */
 export async function saveAnswer(
   supabase: SupabaseClient,
@@ -113,6 +130,8 @@ export async function saveAnswer(
   const session = await findSession(supabase, userId, sessionId);
   if (!session) return "not-found";
   if (answer.position >= session.total) return "out-of-range";
+  // A completed session is final: a late retry is a no-op (the database trigger rejects writes after completion).
+  if (session.completed_at) return "saved";
 
   const { error } = await supabase.from("session_answers").upsert(
     {

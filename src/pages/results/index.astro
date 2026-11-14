@@ -1,12 +1,14 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { createClient } from "@/lib/supabase";
 import { listResults } from "@/lib/services/session-store";
 import { formatSessionDate, DIRECTION_LABELS, ALPHABET_LABELS } from "@/lib/results-format";
 
 const user = Astro.locals.user;
-const supabase = createClient(Astro.request.headers, Astro.cookies);
-const sessions = user && supabase ? await listResults(supabase, user.id) : [];
+const supabase = Astro.locals.supabase;
+if (!user || !supabase) {
+  return new Response("Supabase is not configured", { status: 500 });
+}
+const sessions = await listResults(supabase, user.id);
 ---
 
 <Layout title="Results">

@@ -68,6 +68,7 @@ export function useAnswerSync() {
   const sessionId = useRef<string | null>(null);
   const queue = useRef<QueuedAnswer[]>([]);
   const inFlight = useRef<Promise<boolean> | null>(null);
+  const dropped = useRef(false);
 
   // Invalidates any in-flight work when the component unmounts (leaving mid-session sends nothing extra).
   useEffect(() => {
@@ -100,12 +101,19 @@ export function useAnswerSync() {
 
       const item = queue.current[0] as QueuedAnswer | undefined;
       if (!item) {
-        setSyncStatus("saved");
-        return true;
+        // An answer the server rejected was dropped: the session can never be complete, so report it as not saved.
+        setSyncStatus(dropped.current ? "failed" : "saved");
+        return !dropped.current;
       }
       const id = sessionId.current;
       const sent = await withRetries(() => call<unknown>(`/api/practice/sessions/${id}/answers`, item));
       if (gen !== generation.current) return false;
+      if (sent.kind === "fatal") {
+        // The server will never accept this answer (400/404); drop it so it cannot block the rest of the queue.
+        queue.current.shift();
+        dropped.current = true;
+        continue;
+      }
       if (sent.kind !== "ok") {
         fail(gen, sent);
         return false;
@@ -133,6 +141,7 @@ export function useAnswerSync() {
     sessionId.current = null;
     queue.current = [];
     inFlight.current = null;
+    dropped.current = false;
     setSessionExpired(false);
     void drain();
   }
@@ -170,6 +179,7 @@ export function useAnswerSync() {
     sessionId.current = null;
     queue.current = [];
     inFlight.current = null;
+    dropped.current = false;
     setSessionExpired(false);
     setSyncStatus("saved");
   }

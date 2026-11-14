@@ -1,10 +1,10 @@
 import type { APIRoute } from "astro";
-import { json, requireUser } from "@/lib/http";
+import { json, requireUser, withErrors } from "@/lib/http";
 import { completeSession } from "@/lib/services/session-store";
 
 export const prerender = false;
 
-export const POST: APIRoute = async (context) => {
+export const POST: APIRoute = withErrors(async (context) => {
   const auth = requireUser(context);
   if (auth instanceof Response) return auth;
 
@@ -14,4 +14,4 @@ export const POST: APIRoute = async (context) => {
     return json({ error: "Session has missing answers", missing: outcome.missing }, 409);
   }
   return json(outcome.result);
-};
+});
