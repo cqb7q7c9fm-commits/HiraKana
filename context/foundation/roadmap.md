@@ -44,7 +44,7 @@ Użytkownikowi trudno zapamiętać znaki hiragany i katakany, a brak ich znajomo
 | F-01 | ci-on-main-branch         | (foundation) kontrola jakości i wdrożenie uruchamiają się na gałęzi `main` | —             | Guardrails                                    | done        |
 | S-01 | recognition-session-basic | zalogować się e-mailem i przejść sesję rozpoznawania z informacją zwrotną  | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005 | done |
 | S-02 | save-session-results      | zobaczyć zapisany wynik sesji, z odpowiedziami przypisanymi do znaków      | S-01          | US-01, FR-007, FR-013                         | done |
-| S-03 | error-weighted-repeats    | dostawać błędne znaki częściej niż opanowane                               | S-02          | FR-006                                        | in-progress |
+| S-03 | error-weighted-repeats    | dostawać błędne znaki częściej niż opanowane                               | S-02          | FR-006                                        | done        |
 | S-04 | group-practice            | ćwiczyć znaki w grupach (np. grupa K)                                      | S-01          | FR-009, FR-013                                | in-progress |
 | S-05 | group-mastery-view        | zobaczyć opanowanie grup i siłę znajomości w 3-stopniowej skali            | S-02, S-04    | FR-010, FR-011                                | blocked     |
 | S-06 | hot-five-difficult-chars  | zobaczyć „hot-5” — 5 najtrudniejszych znaków                               | S-02          | FR-012                                        | proposed    |
@@ -128,7 +128,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
   - Reguła „częściej” (2026-11-14, uzgodniona w planie): statystyka znaku z ostatnich 5 odpowiedzi (oba kierunki razem), waga = 1 + 3 × odsetek błędów. Limit powtórzeń w sesji: 3 dla znaku z błędami, 1 dla pozostałych; długość sesji stała, 10 pytań.
 - **Unknowns:** —
 - **Risk:** To główny wgląd produktu (powtórki skupione na błędach); sekwencjonowany zaraz po zapisie, bo bez historii odpowiedzi nie da się go zrealizować.
-- **Status:** in-progress
+- **Status:** done
 
 ### S-04: Ćwiczenie w grupach znaków
 
@@ -229,3 +229,4 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **F-01: (foundation) przepływ CI (lint, sprawdzenie typów, build, smoke) uruchamia się dla gałęzi `main` i pull requestów do niej** — Archived 2026-11-14 → `context/archive/2026-11-07-ci-on-main-branch/`. Lesson: —.
 - **S-01: user can zalogować się e-mailem, wybrać alfabet (hiragana lub katakana) i kierunek nauki, przejść sesję 10–15 znaków z 4 opcjami odpowiedzi i po każdej odpowiedzi zobaczyć, czy była dobra.** — Archived 2026-11-14 → `context/archive/2026-11-14-recognition-session-basic/`. Lesson: —.
 - **S-02: user can zobaczyć zapisany wynik sesji; każda odpowiedź jest przypisana do znaku, także błędna (zgodnie z US-01).** — Archived 2026-11-14 → `context/archive/2026-11-14-save-session-results/`. Lesson: —.
+- **S-03: user can dostawać w sesji znaki, w których się mylił, częściej niż znaki opanowane.** — Archived 2026-11-14 → `context/archive/2026-11-14-error-weighted-repeats/`. Lesson: —.
