@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { KANA } from "@/lib/kana";
-import type { Alphabet, Direction, SessionRecord, SessionResult } from "@/types";
+import type { Alphabet, CharStat, Direction, SessionRecord, SessionResult } from "@/types";
 
 const ROMAJI_SET: ReadonlySet<string> = new Set(KANA.map((entry) => entry.romaji));
 
@@ -203,4 +203,22 @@ export async function listResults(supabase: SupabaseClient, userId: string, limi
     .limit(limit);
   if (error) throw new Error(`Failed to list sessions: ${error.message}`);
   return (data as SessionRow[]).map(toSessionRecord);
+}
+
+interface CharStatRow {
+  romaji: string;
+  answers: number;
+  errors: number;
+}
+
+/**
+ * Stats of the user's last answers per character (window of 5, computed by the recent_char_stats database function).
+ * Bounded by the number of distinct characters in KANA, since the function returns one row per romaji.
+ */
+export async function getCharStats(supabase: SupabaseClient, _userId: string): Promise<CharStat[]> {
+  // The function filters by auth.uid() itself; _userId is kept for signature symmetry with the other readers.
+  const result = await supabase.rpc("recent_char_stats");
+  if (result.error) throw new Error(`Failed to load character stats: ${result.error.message}`);
+  const rows = result.data as CharStatRow[];
+  return rows.map((row) => ({ romaji: row.romaji, answers: row.answers, errors: row.errors }));
 }

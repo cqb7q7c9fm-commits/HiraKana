@@ -56,6 +56,11 @@ const userB = createClient();
 const request = userA.request;
 
 const api = "/api/practice/sessions";
+const statsApi = "/api/practice/stats";
+const statOf = (body, romaji) => (Array.isArray(body) ? body.find((s) => s.romaji === romaji) : undefined);
+let windowSessionId = "";
+// 7 answers for "ha": the 2 oldest wrong, the 5 newest correct -> the window must cover only the 5 newest.
+const windowAnswers = [false, false, true, true, true, true, true];
 let sessionId = "";
 const answer = (position, romaji, isCorrect) => ({ position, romaji, isCorrect });
 
@@ -164,6 +169,44 @@ const steps = [
     () => userA.request(api),
     { status: 200, body: (b) => Array.isArray(b) && b.some((s) => s.id === sessionId) },
   ],
+  ["anonymous cannot read stats", () => anon.request(statsApi), { status: 401 }],
+  [
+    "user A stats reflect the saved answers",
+    () => userA.request(statsApi),
+    {
+      status: 200,
+      body: (b) =>
+        statOf(b, "ki")?.answers === 1 &&
+        statOf(b, "ki").errors === 1 &&
+        statOf(b, "a")?.answers === 1 &&
+        statOf(b, "a").errors === 0 &&
+        statOf(b, "su")?.answers === 1 &&
+        statOf(b, "su").errors === 0,
+    },
+  ],
+  [
+    "user A creates a session for the stats window",
+    async () => {
+      const result = await userA.request(api, {
+        method: "POST",
+        json: { alphabet: "hiragana", direction: "kana-to-romaji", total: windowAnswers.length },
+      });
+      windowSessionId = result.body?.id ?? "";
+      return result;
+    },
+    { status: 201 },
+  ],
+  ...windowAnswers.map((isCorrect, position) => [
+    `user A saves window answer ${position} for "ha"`,
+    () =>
+      userA.request(`${api}/${windowSessionId}/answers`, { method: "POST", json: answer(position, "ha", isCorrect) }),
+    { status: 200 },
+  ]),
+  [
+    "user A stats window covers only the 5 most recent answers",
+    () => userA.request(statsApi),
+    { status: 200, body: (b) => statOf(b, "ha")?.answers === 5 && statOf(b, "ha").errors === 0 },
+  ],
   [
     "user B signup creates account",
     () => userB.request("/api/auth/signup", { method: "POST", form: { email: emailB, password } }),
@@ -188,6 +231,11 @@ const steps = [
   [
     "user B does not see A's session in the list",
     () => userB.request(api),
+    { status: 200, body: (b) => Array.isArray(b) && b.length === 0 },
+  ],
+  [
+    "user B does not see A's stats",
+    () => userB.request(statsApi),
     { status: 200, body: (b) => Array.isArray(b) && b.length === 0 },
   ],
   ["results redirects anonymous user", () => anon.request("/results"), { status: 302, location: "/auth/signin" }],
