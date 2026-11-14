@@ -38,7 +38,7 @@
   - Tradeoff: Nie redukuje liczby przystanków Tab i zmienia semantykę istniejącego `ChoiceGroup` albo rozjeżdża go z `GroupChoice`.
   - Confidence: MEDIUM — prostsze, ale nie rozwiązuje problemu 14 przystanków.
   - Blind spot: Brak testu z czytnikiem ekranu.
-- **Decision**: PENDING
+- **Decision**: FIXED via Fix A (nowy hook `useRadioGroup`: roving tabindex, strzałki, Home/End; używany przez `ChoiceGroup` i `GroupChoice`; podpis romaji `text-xs` bez przyciemnienia)
 
 ### F2 — Sąsiednie duplikaty możliwe pod koniec sesji w małej grupie, bez testu
 
@@ -48,7 +48,7 @@
 - **Location**: src/lib/services/session.ts:44-51
 - **Detail**: W grupach 5- i 6-znakowych limit to 2, więc gdy zostaje tylko jeden znak z wolnymi miejscami, awaryjne dopuszczenie sąsiada daje dwa kolejne pytania o ten sam znak. To zgodne z decyzją planu („w miarę możliwości”), ale `check-session.mjs` sprawdza brak sąsiadów tylko dla Z/D i trybu bez grupy, więc zachowanie dla K nie jest opisane testem.
 - **Fix**: Dodać w `check-session.mjs` asercję dokumentującą, że w K sąsiedzi są dozwolone tylko jako ostateczność (np. liczba sesji z sąsiadem poniżej progu), albo zaakceptować i zostawić jak jest.
-- **Decision**: PENDING
+- **Decision**: SKIPPED
 
 ### F3 — Smoke dla „di” sprawdza tylko statusy HTTP
 
@@ -58,7 +58,7 @@
 - **Location**: scripts/smoke.mjs:211-226
 - **Detail**: Nowe kroki sprawdzają 201 i 200, ale nie to, że odpowiedź „di” faktycznie się zapisała. Test przeszedłby także, gdyby serwer ją zignorował. Brak ryzyka flaky ani kolizji z wcześniejszymi krokami (osobna sesja `total: 1`).
 - **Fix**: Dodać krok po zapisie: statystyki użytkownika A zawierają `di` z `answers === 1` (jak istniejący `statOf(body, "ha")`).
-- **Decision**: PENDING
+- **Decision**: FIXED (nowy krok smoke: statystyki użytkownika A zawierają `di` z `answers === 1`; smoke przechodzi)
 
 ### F4 — Kod fazy 3 wszedł do commitu S-06 (`3ec86ca`)
 
@@ -68,4 +68,4 @@
 - **Location**: git 3ec86ca (feat(hot-five-difficult-chars): Wejście z dashboardu i weryfikacja reguły (p2))
 - **Detail**: Sesja S-06 zrobiła commit ze wspólnym indeksem i zabrała staged pliki fazy 3 (hook, `SetupStep`, `SummaryStep`, smoke, korekta opcji, plan, brief). Zawartość jest poprawna, ale commit ma temat innej zmiany, a wiersze 3.1–3.10 w Progress wskazują na jego SHA. `src/pages/dashboard.astro` w tym commicie należy do S-06.
 - **Fix**: Nie przepisywać historii; przy `/10x-archive` odnotować SHA `3ec86ca` jako zamykający fazę 3 (lub użyć mechanizmu repoint SHA, jeśli potrzebny integracyjny commit).
-- **Decision**: PENDING
+- **Decision**: FIXED (bez zmiany kodu; notatka dla `/10x-archive` w `follow-ups/review-fixes.md`)

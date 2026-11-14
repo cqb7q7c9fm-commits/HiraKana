@@ -226,6 +226,11 @@ const steps = [
     { status: 200 },
   ],
   [
+    "user A stats include the stored dakuten answer",
+    () => userA.request(statsApi),
+    { status: 200, body: (b) => statOf(b, "di")?.answers === 1 && statOf(b, "di").errors === 0 },
+  ],
+  [
     "user B signup creates account",
     () => userB.request("/api/auth/signup", { method: "POST", form: { email: emailB, password } }),
     { status: 302, location: "/auth/confirm-email" },

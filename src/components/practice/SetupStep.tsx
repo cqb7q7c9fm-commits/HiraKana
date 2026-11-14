@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Play } from "lucide-react";
+import { useRadioGroup } from "@/components/hooks/useRadioGroup";
 import { Button } from "@/components/ui/button";
 import { KANA_GROUPS } from "@/lib/kana";
 import { cn } from "@/lib/utils";
@@ -31,10 +32,15 @@ interface ChoiceGroupProps<T extends string> {
 }
 
 function ChoiceGroup<T extends string>({ label, value, options, onChange }: ChoiceGroupProps<T>) {
+  const radio = useRadioGroup(
+    options.map((option) => option.value),
+    value,
+    onChange,
+  );
   return (
     <div className="space-y-2">
       <p className="text-sm font-medium text-blue-100/80">{label}</p>
-      <div role="radiogroup" aria-label={label} className="grid grid-cols-2 gap-3">
+      <div role="radiogroup" aria-label={label} className="grid grid-cols-2 gap-3" onKeyDown={radio.onKeyDown}>
         {options.map((option) => {
           const checked = option.value === value;
           return (
@@ -43,6 +49,7 @@ function ChoiceGroup<T extends string>({ label, value, options, onChange }: Choi
               type="button"
               role="radio"
               aria-checked={checked}
+              {...radio.itemProps(option.value)}
               onClick={() => {
                 onChange(option.value);
               }}
@@ -70,11 +77,19 @@ const GROUP_OPTIONS: { value: string; label: string; romaji?: string }[] = [
   ...KANA_GROUPS.map((g) => ({ value: g.id, label: g.label, romaji: g.members.join(" ") })),
 ];
 
+const GROUP_VALUES = GROUP_OPTIONS.map((option) => option.value);
+
 function GroupChoice({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+  const radio = useRadioGroup(GROUP_VALUES, value, onChange);
   return (
     <div className="space-y-2">
       <p className="text-sm font-medium text-blue-100/80">Group</p>
-      <div role="radiogroup" aria-label="Group" className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+      <div
+        role="radiogroup"
+        aria-label="Group"
+        className="grid grid-cols-3 gap-2 sm:grid-cols-4"
+        onKeyDown={radio.onKeyDown}
+      >
         {GROUP_OPTIONS.map((option) => {
           const checked = option.value === value;
           return (
@@ -83,6 +98,7 @@ function GroupChoice({ value, onChange }: { value: string; onChange: (value: str
               type="button"
               role="radio"
               aria-checked={checked}
+              {...radio.itemProps(option.value)}
               onClick={() => {
                 onChange(option.value);
               }}
@@ -94,7 +110,7 @@ function GroupChoice({ value, onChange }: { value: string; onChange: (value: str
               )}
             >
               <span>{option.label}</span>
-              {option.romaji ? <span className="text-[11px] leading-tight opacity-80">{option.romaji}</span> : null}
+              {option.romaji ? <span className="text-xs leading-tight">{option.romaji}</span> : null}
             </button>
           );
         })}
