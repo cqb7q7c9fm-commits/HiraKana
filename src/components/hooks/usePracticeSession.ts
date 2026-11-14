@@ -9,6 +9,7 @@ export function usePracticeSession() {
   const [step, setStep] = useState<PracticeStep>("setup");
   const [alphabet, setAlphabet] = useState<Alphabet>("hiragana");
   const [direction, setDirection] = useState<Direction>("kana-to-romaji");
+  const [group, setGroup] = useState<string | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
@@ -30,7 +31,7 @@ export function usePracticeSession() {
 
   const score = answers.filter((a) => a.chosenIndex === a.question.correctIndex).length;
 
-  async function start(nextAlphabet: Alphabet, nextDirection: Direction): Promise<void> {
+  async function start(nextAlphabet: Alphabet, nextDirection: Direction, nextGroup: string | null): Promise<void> {
     if (startingRef.current) return;
     startingRef.current = true;
     const token = ++startToken.current;
@@ -42,7 +43,8 @@ export function usePracticeSession() {
     setStarting(false);
     setAlphabet(nextAlphabet);
     setDirection(nextDirection);
-    const nextQuestions = buildSession(KANA, nextAlphabet, nextDirection, Math.random, stats);
+    setGroup(nextGroup);
+    const nextQuestions = buildSession(KANA, nextAlphabet, nextDirection, Math.random, stats, nextGroup);
     setQuestions(nextQuestions);
     setIndex(0);
     setSelected(null);
@@ -104,15 +106,16 @@ export function usePracticeSession() {
     setAnswers([]);
   }
 
-  /** New session with the same alphabet and direction ("Practice again"). */
+  /** New session with the same alphabet, direction and group ("Practice again"). */
   function startAgain(): Promise<void> {
-    return start(alphabet, direction);
+    return start(alphabet, direction, group);
   }
 
   return {
     step,
     alphabet,
     direction,
+    group,
     questions,
     index,
     selected,

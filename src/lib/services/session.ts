@@ -67,8 +67,8 @@ function pickTargets(
 }
 
 /**
- * Builds a SESSION_LENGTH-question session. Targets come from the practice group `group` (by `entry.group`) or from
- * all `entries` when it is null; distractors always come from all `entries`.
+ * Builds a SESSION_LENGTH-question session. Targets and distractors both come from the practice group `group` (by
+ * `entry.group`), or from all `entries` when it is null, so in a group session every option looks like a plausible answer.
  */
 export function buildSession(
   entries: readonly KanaEntry[],
@@ -78,12 +78,12 @@ export function buildSession(
   stats: ReadonlyMap<string, CharStat> = new Map(),
   group: string | null = null,
 ): Question[] {
-  if (entries.length < OPTION_COUNT) {
-    throw new Error(`buildSession needs at least ${String(OPTION_COUNT)} entries, got ${String(entries.length)}`);
-  }
   const pool = group === null ? entries : entries.filter((entry) => entry.group === group);
   if (pool.length === 0) {
     throw new Error(`buildSession: unknown or empty group "${String(group)}"`);
+  }
+  if (pool.length < OPTION_COUNT) {
+    throw new Error(`buildSession needs at least ${String(OPTION_COUNT)} entries, got ${String(pool.length)}`);
   }
 
   const kanaOf = (entry: KanaEntry) => entry[alphabet];
@@ -94,7 +94,7 @@ export function buildSession(
 
   return targets.map((entry) => {
     const distractors = shuffle(
-      entries.filter((other) => other !== entry),
+      pool.filter((other) => other !== entry),
       random,
     ).slice(0, OPTION_COUNT - 1);
     const options = shuffle([entry, ...distractors], random);
@@ -105,4 +105,9 @@ export function buildSession(
       correctIndex: options.indexOf(entry),
     };
   });
+}
+
+/** Distinct romaji values in order of first occurrence (used to show each mistaken character once). */
+export function uniqueRomaji(romaji: readonly string[]): string[] {
+  return [...new Set(romaji)];
 }

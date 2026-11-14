@@ -20,7 +20,7 @@ Na `/practice` użytkownik wybiera alfabet, kierunek i grupę („Wszystkie” a
 | --- | --- | --- | --- |
 | Grupy | 13 grup z roadmapy; ぢ/づ jako „di”/„du” | Zatwierdzone 2026-11-14, zapis jednoznaczny w obu kierunkach. | Roadmap |
 | „Cały alfabet” | Wszystkie 71 znaków jednego alfabetu | Spełnia FR-013; hiragany i katakany nie mieszamy. | Plan |
-| Błędne opcje | 3 z całego alfabetu, poprawna z grupy | Działa dla każdej grupy; zachowuje obecne zachowanie. | Plan |
+| Błędne opcje | W grupie 3 z tej samej grupy; w trybie „Wszystkie” z całego alfabetu | Test ręczny: opcje spoza grupy zdradzały odpowiedź, a każda grupa ma ≥ 5 znaków, więc 4 opcje się mieszczą. | Plan (korekta po teście) |
 | Losowanie w grupie | Jedna reguła z S-03: wagi błędów, limit 3 dla znaku z błędami, `ceil(10/n)` dla pozostałych | FR-006 działa też w grupach, a K bez historii daje każdy znak 2x, Z/D 10 różnych. | Plan |
 | Sąsiednie duplikaty | Unikane w miarę możliwości, awaryjnie dopuszczone | Spójne z S-03, a małe grupy nie rzucają błędu. | Plan |
 | Wybór grupy | Siatka kafelków „Wszystkie” + 13 grup w stylu `ChoiceGroup` | Jedno dotknięcie na iPhonie i iPadzie, spójne z UI. | Plan |
@@ -36,7 +36,7 @@ Na `/practice` użytkownik wybiera alfabet, kierunek i grupę („Wszystkie” a
 
 ## Architecture / Approach
 
-Dane (`KANA` 71 + `KANA_GROUPS`, gotowe) → czysta logika (`buildSession(..., random, stats, group)` z uogólnionym `pickTargets`) → hook i UI. Cele pytań pochodzą z grupy, błędne opcje z całego alfabetu. Limit powtórzeń znaku bez błędów to `ceil(10/n)` dla `n` znaków w puli celów (71 → 1, Z/D → 1, K → 2, Y/W/N → 2), z błędami nadal 3. Zapis z S-02 i `ROMAJI_SET` (wyprowadzony z `KANA`) działają bez zmian.
+Dane (`KANA` 71 + `KANA_GROUPS`, gotowe) → czysta logika (`buildSession(..., random, stats, group)` z uogólnionym `pickTargets`) → hook i UI. Cele pytań i błędne opcje pochodzą z grupy (w trybie „Wszystkie” z całego alfabetu). Limit powtórzeń znaku bez błędów to `ceil(10/n)` dla `n` znaków w puli celów (71 → 1, Z/D → 1, K → 2, Y/W/N → 2), z błędami nadal 3. Zapis z S-02 i `ROMAJI_SET` (wyprowadzony z `KANA`) działają bez zmian.
 
 ## Phases at a Glance
 

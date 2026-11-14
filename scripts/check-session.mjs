@@ -214,6 +214,9 @@ for (const g of KANA_GROUPS) {
   for (const alphabet of alphabets) {
     for (const direction of directions) {
       const pool = new Set(KANA.map((e) => (direction === "kana-to-romaji" ? e.romaji : e[alphabet])));
+      const groupAnswers = new Set(
+        KANA.filter((e) => e.group === g.id).map((e) => (direction === "kana-to-romaji" ? e.romaji : e[alphabet])),
+      );
       for (const [sourceName, makeRandom] of sources) {
         for (let i = 0; i < 100; i++) {
           for (const [statsName, stats] of [
@@ -258,6 +261,10 @@ for (const g of KANA_GROUPS) {
                 q.options.every((o) => pool.has(o)),
                 `${ctx}: option outside the chosen alphabet/direction`,
               );
+              assert(
+                q.options.every((o) => groupAnswers.has(o)),
+                `${ctx}: option outside the group (distractors must come from the group)`,
+              );
             }
             groupChecked++;
           }
@@ -271,14 +278,14 @@ for (const g of KANA_GROUPS) {
   );
 }
 
-// Distractors come from the whole alphabet, not just the group.
+// Without a group, distractors still come from the whole alphabet (more than one group's worth of options overall).
 const wide = new Set();
 for (let i = 0; i < 50; i++) {
-  for (const q of buildSession(KANA, "hiragana", "kana-to-romaji", seeded(i + 1), new Map(), "a")) {
+  for (const q of buildSession(KANA, "hiragana", "kana-to-romaji", seeded(i + 1))) {
     for (const o of q.options) wide.add(o);
   }
 }
-assert(wide.size > 5, "distractors must come from the whole alphabet, not only the group");
+assert(wide.size > 10, "without a group, distractors must come from the whole alphabet");
 
 console.log(
   `PASS: ${KANA.length} kana rows, ${checked} sessions checked (4 modes x 2 random sources x ${ITERATIONS}), ${groupChecked} group sessions, weighted selection (errored ${hotTotal} vs error-free ${coldTotal} appearances over ${ITERATIONS} sessions)`,

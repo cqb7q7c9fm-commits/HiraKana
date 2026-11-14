@@ -59,6 +59,7 @@ const api = "/api/practice/sessions";
 const statsApi = "/api/practice/stats";
 const statOf = (body, romaji) => (Array.isArray(body) ? body.find((s) => s.romaji === romaji) : undefined);
 let windowSessionId = "";
+let dakutenSessionId = "";
 // 7 answers for "ha": the 2 oldest wrong, the 5 newest correct -> the window must cover only the 5 newest.
 const windowAnswers = [false, false, true, true, true, true, true];
 let sessionId = "";
@@ -206,6 +207,23 @@ const steps = [
     "user A stats window covers only the 5 most recent answers",
     () => userA.request(statsApi),
     { status: 200, body: (b) => statOf(b, "ha")?.answers === 5 && statOf(b, "ha").errors === 0 },
+  ],
+  [
+    "user A creates a session for a dakuten character",
+    async () => {
+      const result = await userA.request(api, {
+        method: "POST",
+        json: { alphabet: "hiragana", direction: "kana-to-romaji", total: 1 },
+      });
+      dakutenSessionId = result.body?.id ?? "";
+      return result;
+    },
+    { status: 201 },
+  ],
+  [
+    "user A saves an answer for a dakuten character",
+    () => userA.request(`${api}/${dakutenSessionId}/answers`, { method: "POST", json: answer(0, "di", true) }),
+    { status: 200 },
   ],
   [
     "user B signup creates account",

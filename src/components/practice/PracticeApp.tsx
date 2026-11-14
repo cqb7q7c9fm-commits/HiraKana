@@ -48,6 +48,7 @@ export default function PracticeApp() {
     <SetupStep
       initialAlphabet={session.alphabet}
       initialDirection={session.direction}
+      initialGroup={session.group}
       starting={session.starting}
       onStart={session.start}
     />

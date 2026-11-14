@@ -4,6 +4,7 @@ import type { SyncStatus } from "@/components/hooks/useAnswerSync";
 import { SyncBanner } from "@/components/practice/SyncBanner";
 import { Button } from "@/components/ui/button";
 import { KANA } from "@/lib/kana";
+import { uniqueRomaji } from "@/lib/services/session";
 import type { Alphabet, AnswerRecord, SessionResult } from "@/types";
 
 interface Props {
@@ -36,11 +37,15 @@ export function SummaryStep({
   // Saved result from the server when available; otherwise the local result.
   const shownScore = result?.session.score ?? score;
   const shownTotal = result?.session.total ?? total;
-  const wrong = result
-    ? result.mistakes.map((romaji) => ({ romaji, kana: KANA.find((entry) => entry.romaji === romaji)?.[alphabet] }))
-    : answers
-        .filter((a) => a.chosenIndex !== a.question.correctIndex)
-        .map(({ question }) => ({ romaji: question.entry.romaji, kana: question.entry[alphabet] }));
+  const mistakenRomaji = result
+    ? uniqueRomaji(result.mistakes)
+    : uniqueRomaji(
+        answers.filter((a) => a.chosenIndex !== a.question.correctIndex).map((a) => a.question.entry.romaji),
+      );
+  const wrong = mistakenRomaji.map((romaji) => ({
+    romaji,
+    kana: KANA.find((entry) => entry.romaji === romaji)?.[alphabet],
+  }));
   const headingRef = useFocusOnChange<HTMLHeadingElement>(true);
 
   return (

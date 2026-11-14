@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { KANA } from "@/lib/kana";
+import { uniqueRomaji } from "@/lib/services/session";
 import { getResult } from "@/lib/services/session-store";
 import { formatSessionDate, DIRECTION_LABELS, ALPHABET_LABELS } from "@/lib/results-format";
 
@@ -16,7 +17,7 @@ if (!result) {
 }
 
 const session = result?.session;
-const mistakes = (result?.mistakes ?? []).map((romaji) => ({
+const mistakes = uniqueRomaji(result?.mistakes ?? []).map((romaji) => ({
   romaji,
   kana: session ? KANA.find((entry) => entry.romaji === romaji)?.[session.alphabet] : undefined,
 }));
