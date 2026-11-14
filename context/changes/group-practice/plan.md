@@ -6,18 +6,17 @@ Użytkownik może ograniczyć sesję rozpoznawania do jednej z 13 grup znaków (
 
 ## Current State Analysis
 
-Po S-01 i S-02 (obie zarchiwizowane) sesja działa end-to-end: wybór alfabetu i kierunku, 10 pytań, zapis odpowiedzi w tle do Supabase, podsumowanie z bazy i historia `/results`.
+Po S-01, S-02 i S-03 (wszystkie zarchiwizowane) sesja działa end-to-end: wybór alfabetu i kierunku, 10 pytań ważonych błędami, zapis odpowiedzi w tle do Supabase, podsumowanie z bazy i historia `/results`. Faza 1 tego planu jest zatwierdzona (`817f070`): `KANA` ma 71 znaków z polem `group`, jest `KANA_GROUPS` i niezmienniki danych w `check-session.mjs`.
 
-- `src/lib/kana.ts` ma 46 znaków podstawowych (bez dakuten/handakuten, bez grup).
-- `buildSession` (`src/lib/services/session.ts:18`) losuje 10 unikalnych znaków z całej przekazanej tablicy i rzuca błąd, gdy jest ich mniej niż 10. Grupa 5-znakowa jest więc odrzucana. Błędne opcje losuje z całej przekazanej tablicy.
-- `usePracticeSession.start(alphabet, direction)` (`src/components/hooks/usePracticeSession.ts:17`) i `SetupStep` nie znają grupy; `startAgain` powtarza tylko alfabet i kierunek.
-- Zapis z S-02 przechowuje `romaji` per odpowiedź (`session_answers.romaji`), a `saveAnswerSchema` buduje `ROMAJI_SET` z `KANA` (`src/lib/services/session-store.ts:6`). Nowe znaki zostaną więc przyjęte bez zmian po stronie serwera, a grupa daje się wyprowadzić z `romaji`, bez nowej kolumny.
-- `scripts/check-session.mjs` twardo sprawdza `KANA.length === 46`, „pytania o różne znaki” i błąd dla `KANA.slice(0, 5)`.
+- `buildSession` (`src/lib/services/session.ts`) po S-03 przyjmuje `(entries, alphabet, direction, random, stats)` i losuje cele przez `pickTargets`: ważone błędami z ostatnich 5 odpowiedzi (`weightOf`: 1 + 3 × odsetek błędów), limit powtórzeń w sesji 3 (`MAX_REPEATS`) dla znaku z błędami i 1 dla pozostałych, bez sąsiednich duplikatów. Gdy losowanie nie ma z czego wybrać, rzuca „could not select enough questions”. Grupa 5-znakowa z limitem 1 dałaby najwyżej 5 pytań, więc dziś rzuciłaby ten błąd. Pula błędnych opcji to całe `entries`, a minimalna pula to `max(SESSION_LENGTH, OPTION_COUNT)`.
+- `usePracticeSession.start(alphabet, direction)` jest asynchroniczny: pobiera statystyki (`fetchCharStats`, timeout, fallback na pustą mapę), ma flagę `starting` i ochronę przed podwójnym startem; `SetupStep` i `startAgain` nie znają grupy.
+- Zapis z S-02 przechowuje `romaji` per odpowiedź (`session_answers.romaji`), a `saveAnswerSchema` buduje `ROMAJI_SET` z `KANA` (`src/lib/services/session-store.ts:6`). Nowe znaki zostaną więc przyjęte bez zmian po stronie serwera, a grupa daje się wyprowadzić z `romaji`, bez nowej kolumny. Endpoint statystyk zwraca jeden wiersz na `romaji`, więc obejmuje też nowe znaki.
+- `scripts/check-session.mjs` ma już niezmienniki danych z fazy 1 oraz niezmienniki S-03 dla trybu bez grupy (wagi, limity 3/1, brak sąsiednich duplikatów, „różne znaki”). Sprawdza też błąd dla `KANA.slice(0, 5)`, co po zmianie minimalnej puli przestanie rzucać.
 - Lista pomyłek (`SummaryStep.tsx`, `results/[id].astro`) pokazuje wpis na każdą błędną odpowiedź, a `SummaryStep` używa `key={romaji}`, co przy powtórkach da zduplikowane klucze.
 
 ## Desired End State
 
-Na `/practice` użytkownik wybiera alfabet, kierunek i grupę („Wszystkie” albo jedną z 13). Sesja ma zawsze 10 pytań; w grupie K każdy znak pada dokładnie 2 razy w losowej kolejności. „Practice again” zachowuje grupę. Podsumowanie i `/results/[id]` pokazują każdy pomylony znak raz, a wynik X/10 nadal liczy pytania. W bazie odpowiedzi trafiają jak dotąd, także dla nowych znaków.
+Na `/practice` użytkownik wybiera alfabet, kierunek i grupę („Wszystkie” albo jedną z 13). Sesja ma zawsze 10 pytań; w grupie K bez historii błędów każdy znak pada dokładnie 2 razy w losowej kolejności, a znaki z błędami (statystyka S-03) padają częściej, do 3 razy. „Practice again” zachowuje grupę. Podsumowanie i `/results/[id]` pokazują każdy pomylony znak raz, a wynik X/10 nadal liczy pytania. W bazie odpowiedzi trafiają jak dotąd, także dla nowych znaków.
 
 Weryfikacja: `npm run check:session` (dane i niezmienniki sesji), lint, `astro check`, build, smoke z odpowiedzią dla znaku dakuten oraz ręczne przejście sesji grupy K i Z/D.
 
@@ -26,21 +25,26 @@ Weryfikacja: `npm run check:session` (dane i niezmienniki sesji), lint, `astro c
 - `saveAnswerSchema` i filtr romaji są wyprowadzane z `KANA`, więc dodanie znaków nie wymaga migracji ani zmian w API (`src/lib/services/session-store.ts:6`).
 - Grupy są wspólne dla obu alfabetów tylko jako podział według romaji; pytania i opcje zawsze pochodzą z jednego wybranego alfabetu.
 - Romaji ぢ/づ to „di”/„du” (nie „ji”/„zu”), więc wszystkie wartości `romaji`, `hiragana` i `katakana` pozostają unikalne, a odpowiedzi jednoznaczne w obu kierunkach.
-- `buildSession` bierze `entries` jednocześnie jako pulę celów i pulę błędnych opcji (`session.ts:33-40`); grupa musi rozdzielić te role.
-- `check-session.mjs` wywołuje `buildSession(KANA, alphabet, direction, random)`; nowy parametr grupy dodajemy na końcu, żeby nie psuć istniejących wywołań.
+- `buildSession` bierze `entries` jednocześnie jako pulę celów i pulę błędnych opcji; grupa musi rozdzielić te role (cele z grupy, opcje z całego `entries`).
+- Limit „1 powtórzenie” dla znaku bez błędów z S-03 uniemożliwia 10 pytań z grupy mniejszej niż 10 znaków; limit musi zależeć od rozmiaru puli celów (`ceil(10/n)`), co dla pełnego alfabetu (n = 71) i grupy Z/D (n = 10) daje te same 1.
+- Zakaz sąsiednich duplikatów z S-03 może utknąć w małej grupie (zostaje tylko znak, który padł przed chwilą), więc w trybie grupowym obowiązuje „w miarę możliwości” z awaryjnym dopuszczeniem sąsiada.
+- `check-session.mjs` i hook wywołują `buildSession(entries, alphabet, direction, random, stats)`; parametr grupy dodajemy jako 6., żeby nie psuć istniejących wywołań.
 
 ## What We're NOT Doing
 
 - Zapisu grupy w bazie (kolumna w `practice_sessions`) ani migracji; grupa wynika z `romaji`.
-- Statystyk i widoku opanowania grup, siły znajomości (S-05), hot-5 (S-06) oraz ważonych powtórek (S-03).
+- Statystyk i widoku opanowania grup, siły znajomości (S-05) oraz hot-5 (S-06). Ważenie błędami (S-03) już istnieje; tu tylko je stosujemy w sesji grupowej.
+- Zmiany reguły wag ani limitu 3 powtórzeń z S-03.
 - Kombinacji (kya, sha, cha …), małego っ i rozszerzonych katakany (poza MVP wg roadmapy).
-- Reguły, która rozdzielałaby dwa kolejne pytania o ten sam znak w sesji grupowej (kolejność jest losowa).
+- Bezwzględnej gwarancji braku dwóch kolejnych pytań o ten sam znak w sesji grupowej (tylko „w miarę możliwości”).
 - Wyświetlania grupy na `/results` ani filtrowania historii po grupie.
 - Nowych zależności testowych (zostajemy przy `check-session.mjs` i `smoke.mjs`).
 
 ## Implementation Approach
 
-Trzy fazy od danych do UI. Najpierw dane i grupy z niezmiennikami (każdy znak w dokładnie jednej grupie), potem czysta logika `buildSession` z grupą i powtórkami, objęta `check-session`, na końcu hook i UI. Błędne opcje zawsze pochodzą z całego wybranego alfabetu (71 znaków), a poprawna odpowiedź z grupy. Reguła powtórek: grupa o `n < 10` znakach dostaje po `floor(10/n)` pytań na znak, a resztę do 10 losuje się spośród znaków grupy (każdy znak pada `floor` albo `floor+1` razy); grupa o `n ≥ 10` znakach daje 10 różnych znaków. Dla grup z roadmapy znak pada najwyżej 2 razy (limit z roadmapy: 3).
+Trzy fazy od danych do UI. Najpierw dane i grupy z niezmiennikami (każdy znak w dokładnie jednej grupie; zrobione), potem czysta logika `buildSession` z grupą, objęta `check-session`, na końcu hook i UI. Błędne opcje zawsze pochodzą z całego wybranego alfabetu (71 znaków), a poprawna odpowiedź z grupy.
+
+Jedna reguła losowania dla trybu „Wszystkie” i grup: `pickTargets` z S-03 losuje 10 celów z puli celów (grupa albo cały alfabet) z tymi samymi wagami błędów. Limit powtórzeń w sesji dla znaku z błędami zostaje `MAX_REPEATS` (3), a dla znaku bez błędów to `ceil(10/n)`, gdzie `n` to liczba znaków w puli celów (71 → 1, Z/D → 1, K → 2, Y/W/N → 2). Suma limitów zawsze pokrywa 10 pytań. Skutek dla grup bez historii błędów: 5-znakowa grupa (np. K) daje każdy znak dokładnie 2 razy, Z/D daje 10 różnych znaków, a Y/W/N po 1–2 razy (jeden znak może w danej sesji nie paść). Z historią błędów znak z błędami pada częściej, do 3 razy. Sąsiednie duplikaty są wykluczane, a gdy losowanie by utknęło, dopuszczany jest sąsiad jako ostateczność.
 
 ## Faza 1: Dane znaków i grupy
 
@@ -86,7 +90,9 @@ Rozszerzenie `KANA` o 25 znaków i wprowadzenie 13 zatwierdzonych grup z jednozn
 
 ### Overview
 
-`buildSession` buduje sesję 10 pytań dla jednej grupy albo dla całego alfabetu, z równymi powtórkami w małych grupach.
+`buildSession` buduje sesję 10 pytań dla jednej grupy albo dla całego alfabetu na bazie istniejącego losowania z S-03 (`pickTargets`), z limitem powtórzeń zależnym od rozmiaru puli celów.
+
+*Uwaga (przeplanowanie po S-03, 2026-11-14): pierwotny opis tej fazy zakładał kod sprzed S-03 (losowanie `shuffle().slice()`, `group` jako 5. parametr). Zakres poniżej zastępuje go; tytuły i kryteria w sekcji Progress pozostają bez zmian.*
 
 ### Changes Required:
 
@@ -94,17 +100,17 @@ Rozszerzenie `KANA` o 25 znaków i wprowadzenie 13 zatwierdzonych grup z jednozn
 
 **File**: `src/lib/services/session.ts`
 
-**Intent**: Dodać opcjonalny filtr grupy: cele pytań pochodzą z grupy (lub z całej tablicy, gdy grupy nie podano), a 3 błędne opcje zawsze z całej tablicy `entries` dla wybranego alfabetu. Dla `n < 10` celów rozłożyć 10 pytań równo wg reguły z „Implementation Approach”, dla `n ≥ 10` wziąć 10 różnych znaków; całość wymieszać losowo. Błąd dla nieznanej lub pustej grupy oraz dla puli mniejszej niż liczba opcji.
+**Intent**: Dodać opcjonalny filtr grupy i uogólnić `pickTargets`. Pulą celów jest grupa (po `entry.group`) albo całe `entries`, gdy grupy nie podano; 3 błędne opcje zawsze pochodzą z całego `entries` dla wybranego alfabetu. Wagi błędów i `MAX_REPEATS` dla znaku z błędami zostają jak w S-03, a limit dla znaku bez błędów zależy od rozmiaru puli celów: `ceil(SESSION_LENGTH / n)`. Zakaz sąsiednich duplikatów działa w miarę możliwości: gdy po wykluczeniu poprzedniego celu nie ma z czego wybrać, wybór powtarza się bez wykluczenia. Błąd dla nieznanej lub pustej grupy oraz dla `entries` mniejszego niż `OPTION_COUNT`; minimalna pula `entries` przestaje wymagać `SESSION_LENGTH`.
 
-**Contract**: `buildSession(entries, alphabet, direction, random = Math.random, group: string | null = null): Question[]`. Zwraca zawsze `SESSION_LENGTH` pytań. Niezmienniki: dla celu `n < 10` liczba pytań o jeden znak to `floor(10/n)` albo `floor(10/n)+1`; wszystkie cele należą do grupy; opcje są unikalne, mają `OPTION_COUNT` elementów, zawierają poprawną odpowiedź i pochodzą z puli wybranego alfabetu i kierunku. Minimalna pula `entries` to `OPTION_COUNT`, a nie `SESSION_LENGTH`.
+**Contract**: `buildSession(entries, alphabet, direction, random = Math.random, stats = new Map(), group: string | null = null): Question[]`. Zwraca zawsze `SESSION_LENGTH` pytań. Niezmienniki: wszystkie cele należą do grupy (lub do `entries`); znak bez błędów pada najwyżej `ceil(10/n)` razy, znak z błędami najwyżej `MAX_REPEATS`; bez grupy i bez statystyk 10 różnych znaków (jak dziś); grupa 5-znakowa bez statystyk daje każdy znak dokładnie 2 razy; Z/D daje 10 różnych znaków; opcje są unikalne, mają `OPTION_COUNT` elementów, zawierają poprawną odpowiedź i pochodzą z puli wybranego alfabetu i kierunku. Wywołania bez 6. parametru działają jak dotąd.
 
 #### 2. Niezmienniki sesji
 
 **File**: `scripts/check-session.mjs`
 
-**Intent**: Rozszerzyć kontrolę sesji o każdą z 13 grup w 4 trybach (2 alfabety × 2 kierunki), z deterministycznym i losowym źródłem liczb. Zastąpić warunek „pytania o różne znaki” regułą zależną od rozmiaru celu i dodać przypadki brzegowe.
+**Intent**: Zachować niezmienniki S-03 dla trybu bez grupy i dodać kontrolę każdej z 13 grup w 4 trybach (2 alfabety × 2 kierunki), z deterministycznym i losowym źródłem liczb, bez statystyk i ze statystykami błędów. Zmienić sprawdzenie „za mało wpisów” tak, aby dotyczyło puli mniejszej niż `OPTION_COUNT` (np. `KANA.slice(0, 3)`).
 
-**Contract**: Sprawdzane: długość 10; wszystkie cele z grupy; liczba wystąpień znaku zgodna z regułą powtórek (np. K: dokładnie 2 każdy; Y/W/N: 1 lub 2; Z/D: 10 różnych); opcje z całego alfabetu; błąd dla nieznanej grupy i dla puli mniejszej niż 4; tryb bez grupy nadal daje 10 różnych znaków z 71.
+**Contract**: Sprawdzane dla grup: długość 10; wszystkie cele z grupy; limity powtórzeń (`ceil(10/n)` bez błędów, `MAX_REPEATS` z błędami); K bez statystyk: dokładnie 2 razy każdy znak; Z/D bez statystyk: 10 różnych; znak z błędami pada średnio częściej niż bez błędów; sąsiednie duplikaty nie występują w grupach, w których da się ich uniknąć (Z/D, a dla K tylko test, że sesja zawsze powstaje bez błędu „could not select”); opcje z całego alfabetu; błąd dla nieznanej grupy i dla puli mniejszej niż 4; tryb bez grupy nadal daje 10 różnych znaków z 71 i nie ma sąsiednich duplikatów.
 
 ### Success Criteria:
 
@@ -116,7 +122,7 @@ Rozszerzenie `KANA` o 25 znaków i wprowadzenie 13 zatwierdzonych grup z jednozn
 
 #### Manual Verification:
 
-- Czytelność zmian: po przejrzeniu `buildSession` reguła powtórek i rola puli opcji są zrozumiałe bez czytania testów
+- Czytelność zmian: po przejrzeniu `buildSession` reguła powtórek (limit `ceil(10/n)`, wagi, awaryjny sąsiad) i rola puli opcji są zrozumiałe bez czytania testów
 
 **Implementation Note**: After completing this phase and all automated verification passes, pause here for manual confirmation from the human that the manual testing was successful before proceeding to the next phase. Phase blocks use plain bullets — the corresponding `- [ ]` checkboxes for these items live in the `## Progress` section at the bottom of the plan.
 
@@ -134,9 +140,9 @@ Wybór grupy na ekranie ustawień, przekazanie jej przez hook oraz poprawka list
 
 **File**: `src/components/hooks/usePracticeSession.ts`
 
-**Intent**: Przechowywać wybraną grupę w stanie, przekazywać ją do `buildSession` i zachować w „Practice again”. Zapis odpowiedzi z S-02 pozostaje bez zmian (`sync.begin`, `enqueue`).
+**Intent**: Przechowywać wybraną grupę w stanie, przekazywać ją do `buildSession` (wraz z pobranymi statystykami) i zachować w „Practice again”. Zapis odpowiedzi z S-02 oraz pobieranie statystyk z S-03 (`fetchCharStats`, `starting`, ochrona przed podwójnym startem) pozostają bez zmian.
 
-**Contract**: `start(alphabet, direction, group: string | null)`, nowe pole `group` w zwracanym obiekcie; `startAgain` używa bieżącej grupy; `restart` wraca do ustawień, nie kasując ostatniego wyboru.
+**Contract**: `start(alphabet, direction, group: string | null): Promise<void>` wywołuje `buildSession(KANA, alphabet, direction, Math.random, stats, group)`; nowe pole `group` w zwracanym obiekcie; `startAgain` używa bieżącej grupy; `restart` wraca do ustawień, nie kasując ostatniego wyboru.
 
 #### 2. Ekran ustawień
 
@@ -144,7 +150,7 @@ Wybór grupy na ekranie ustawień, przekazanie jej przez hook oraz poprawka list
 
 **Intent**: Dodać trzecią grupę wyboru w stylu istniejącego `ChoiceGroup`: kafelki „Wszystkie” + 13 grup (etykieta grupy i jej znaki w zapisie łacińskim, np. „K · ka ki ku ke ko”). Układ zwarty na wąskim ekranie (iPhone), kafelki o wysokości co najmniej 44 px, `role="radiogroup"` i stan `aria-checked` jak w pozostałych grupach.
 
-**Contract**: `SetupStep` przyjmuje `initialGroup` i wywołuje `onStart(alphabet, direction, group)`; `PracticeApp` przekazuje `session.group`. Wartość „Wszystkie” to `null`.
+**Contract**: `SetupStep` przyjmuje `initialGroup` (obok istniejącego `starting`) i wywołuje `onStart(alphabet, direction, group)`; `PracticeApp` przekazuje `session.group`. Wartość „Wszystkie” to `null`.
 
 #### 3. Lista pomyłek bez duplikatów
 
@@ -173,7 +179,7 @@ Wybór grupy na ekranie ustawień, przekazanie jej przez hook oraz poprawka list
 
 #### Manual Verification:
 
-- Na `/practice` wybór grupy K daje 10 pytań, każdy z pięciu znaków dokładnie 2 razy, a opcje zawierają znaki spoza grupy
+- Na `/practice` wybór grupy K daje 10 pytań, każdy z pięciu znaków dokładnie 2 razy, a opcje zawierają znaki spoza grupy (dotyczy konta bez historii błędów w grupie K; ze statystyką błędów znak z błędami pada do 3 razy, a pozostałe po 1–2, zgodnie z regułą S-03)
 - Grupa Z/D daje 10 różnych znaków, a ぢ/づ pytają i odpowiadają „di”/„du” w obu kierunkach
 - „Practice again” zachowuje grupę, „Change settings” wraca do ekranu z zachowanym wyborem
 - Znak pomylony dwa razy pojawia się na liście „Characters to review” jeden raz, a wynik X/10 liczy oba błędy
@@ -188,8 +194,8 @@ Wybór grupy na ekranie ustawień, przekazanie jej przez hook oraz poprawka list
 
 ### Unit Tests:
 
-- `scripts/check-session.mjs` (zero zależności): dane (71 wierszy, 13 grup, każdy znak w jednej grupie) i niezmienniki `buildSession` dla każdej grupy, 4 trybów i dwóch źródeł losowości.
-- Przypadki brzegowe: grupa 5-, 6- i 10-znakowa, nieznana grupa, za mała pula.
+- `scripts/check-session.mjs` (zero zależności): dane (71 wierszy, 13 grup, każdy znak w jednej grupie) i niezmienniki `buildSession` dla każdej grupy, 4 trybów i dwóch źródeł losowości, bez statystyk i ze statystykami błędów (wagi, limity 3 i `ceil(10/n)`).
+- Przypadki brzegowe: grupa 5-, 6- i 10-znakowa, nieznana grupa, za mała pula, sesja grupy K zawsze powstaje (brak błędu „could not select”), wszystkie znaki w grupie z błędami.
 
 ### Integration Tests:
 
@@ -197,7 +203,7 @@ Wybór grupy na ekranie ustawień, przekazanie jej przez hook oraz poprawka list
 
 ### Manual Testing Steps:
 
-1. Sesja grupy K w kierunku kana → romaji: policz wystąpienia znaków (po 2) i sprawdź opcje.
+1. Sesja grupy K w kierunku kana → romaji (konto bez historii błędów w K): policz wystąpienia znaków (po 2) i sprawdź opcje.
 2. Sesja grupy Z/D w katakanie, romaji → kana: pytanie „di” ma odpowiedź ヂ, a „du” ヅ.
 3. Pomyl ten sam znak dwa razy w grupie K i sprawdź listę pomyłek oraz wynik.
 4. „Practice again” i „Change settings” po sesji grupowej.
@@ -215,7 +221,8 @@ Brak migracji bazy. Istniejące odpowiedzi z S-02 zawierają tylko znaki podstaw
 
 - Roadmap: `context/foundation/roadmap.md` (S-04, Decisions: 13 grup, ぢ/づ jako „di”/„du”)
 - Archiwalny plan zapisu wyników: `context/archive/2026-11-14-save-session-results/plan.md`
-- Sesja: `src/lib/services/session.ts:18`, `src/components/hooks/usePracticeSession.ts:17`
+- Archiwalny plan ważonych powtórek (S-03): `context/archive/2026-11-14-error-weighted-repeats/plan.md`
+- Sesja: `src/lib/services/session.ts` (`pickTargets`, `buildSession`), `src/components/hooks/usePracticeSession.ts` (`start`), `src/components/hooks/charStats.ts`
 - Walidacja romaji: `src/lib/services/session-store.ts:6`
 
 ## Progress
@@ -226,25 +233,25 @@ Brak migracji bazy. Istniejące odpowiedzi z S-02 zawierają tylko znaki podstaw
 
 #### Automated
 
-- [x] 1.1 Niezmienniki danych i sesji przechodzą: `npm run check:session`
-- [x] 1.2 Sprawdzenie typów przechodzi: `npx astro check`
-- [x] 1.3 Linting przechodzi: `npm run lint`
+- [x] 1.1 Niezmienniki danych i sesji przechodzą: `npm run check:session` — 817f070
+- [x] 1.2 Sprawdzenie typów przechodzi: `npx astro check` — 817f070
+- [x] 1.3 Linting przechodzi: `npm run lint` — 817f070
 
 #### Manual
 
-- [x] 1.4 Przegląd tablicy: hiragana i katakana dla ga/gi/gu/ge/go, za/ji/zu/ze/zo/da/di/du/de/do, ba…bo, pa…po są poprawne, a ぢ/づ (ヂ/ヅ) mają romaji „di”/„du”
+- [x] 1.4 Przegląd tablicy: hiragana i katakana dla ga/gi/gu/ge/go, za/ji/zu/ze/zo/da/di/du/de/do, ba…bo, pa…po są poprawne, a ぢ/づ (ヂ/ヅ) mają romaji „di”/„du” — 817f070
 
 ### Phase 2: Logika sesji z grupą
 
 #### Automated
 
-- [ ] 2.1 Niezmienniki sesji dla 13 grup i trybu „Wszystkie” przechodzą: `npm run check:session`
-- [ ] 2.2 Sprawdzenie typów przechodzi: `npx astro check`
-- [ ] 2.3 Linting przechodzi: `npm run lint`
+- [x] 2.1 Niezmienniki sesji dla 13 grup i trybu „Wszystkie” przechodzą: `npm run check:session`
+- [x] 2.2 Sprawdzenie typów przechodzi: `npx astro check`
+- [x] 2.3 Linting przechodzi: `npm run lint`
 
 #### Manual
 
-- [ ] 2.4 Czytelność zmian: po przejrzeniu `buildSession` reguła powtórek i rola puli opcji są zrozumiałe bez czytania testów
+- [x] 2.4 Czytelność zmian: po przejrzeniu `buildSession` reguła powtórek i rola puli opcji są zrozumiałe bez czytania testów
 
 ### Phase 3: UI i hook
 

@@ -19,3 +19,7 @@ Decyzje z wywiadu (2026-11-14), do użycia przy wznowieniu:
 - Sesja 10 pytań dla grup < 10 znaków: równy rozkład powtórek (np. K: każdy 2x), losowa kolejność; grupy ≥ 10 znaków: 10 różnych znaków. Zmienia niezmiennik „pytania o różne znaki” w `scripts/check-session.mjs`.
 - UI: siatka kafelków „Wszystkie” + 13 grup w stylu `ChoiceGroup` w `SetupStep`.
 - Do uwzględnienia: lista pomyłek w podsumowaniu używa `key={romaji}`, a przy powtórkach klucze się zdublują (i lista pomyłek w S-02 może zawierać duplikaty).
+
+Faza 2 wstrzymana 2026-11-14: niezatwierdzone zmiany `error-weighted-repeats` (S-03) w `src/lib/services/session.ts`, `src/types.ts` i `scripts/check-session.mjs` kolidują z planem fazy 2 (5. parametr `buildSession` to już `stats`, inne losowanie celów i reguła powtórek). Decyzja: stop and re-plan po zatwierdzeniu S-03; faza 2 planu do przeplanowania na jego kodzie (m.in. pozycja parametru `group`, połączenie z `pickTargets`). Faza 1 zatwierdzona: 817f070.
+
+Przeplanowanie 2026-11-14: S-03 zarchiwizowane (`1de35fa`), plan faz 2 i 3 zaktualizowany na jego kodzie (`pickTargets` uogólnione o grupę, limit `ceil(10/n)`, wagi błędów w grupie, sąsiedzi „w miarę możliwości”, `group` jako 6. parametr `buildSession`). Wznowienie: `/10x-implement group-practice phase 2`.

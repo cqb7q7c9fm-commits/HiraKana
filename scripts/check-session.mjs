@@ -129,11 +129,20 @@ assert(positions.size === OPTION_COUNT, `correct position is not random enough: 
 // Too few entries must throw.
 let threw = false;
 try {
-  buildSession(KANA.slice(0, 5), "hiragana", "kana-to-romaji");
+  buildSession(KANA.slice(0, OPTION_COUNT - 1), "hiragana", "kana-to-romaji");
 } catch {
   threw = true;
 }
-assert(threw, "buildSession must throw for too few entries");
+assert(threw, "buildSession must throw for fewer entries than OPTION_COUNT");
+
+// Unknown group must throw.
+threw = false;
+try {
+  buildSession(KANA, "hiragana", "kana-to-romaji", Math.random, new Map(), "nope");
+} catch {
+  threw = true;
+}
+assert(threw, "buildSession must throw for an unknown group");
 
 // Weighted selection.
 assert(weightOf(undefined) === 1, "weightOf(undefined) must be 1");
@@ -189,6 +198,88 @@ assert(
 );
 assert(hotTotal > 0, "errored char never appeared");
 
+// Group sessions: every group in 4 modes, both random sources, without and with error stats.
+let groupChecked = 0;
+for (const g of KANA_GROUPS) {
+  const n = g.members.length;
+  const plainCap = Math.ceil(SESSION_LENGTH / n);
+  const gHot = g.members[0];
+  const gCold = g.members[1];
+  const gStats = new Map([
+    [gHot, { romaji: gHot, answers: 5, errors: 5 }],
+    [gCold, { romaji: gCold, answers: 5, errors: 0 }],
+  ]);
+  let gHotTotal = 0;
+  let gColdTotal = 0;
+  for (const alphabet of alphabets) {
+    for (const direction of directions) {
+      const pool = new Set(KANA.map((e) => (direction === "kana-to-romaji" ? e.romaji : e[alphabet])));
+      for (const [sourceName, makeRandom] of sources) {
+        for (let i = 0; i < 100; i++) {
+          for (const [statsName, stats] of [
+            ["no stats", new Map()],
+            ["stats", gStats],
+          ]) {
+            const ctx = `group ${g.id}/${alphabet}/${direction}/${sourceName}/${statsName}#${i}`;
+            const session = buildSession(KANA, alphabet, direction, makeRandom(i), stats, g.id);
+            assert(session.length === SESSION_LENGTH, `${ctx}: wrong session length ${session.length}`);
+            assert(
+              session.every((q) => q.entry.group === g.id),
+              `${ctx}: target outside the group`,
+            );
+            for (const m of g.members) {
+              const errored = stats.has(m) && stats.get(m).errors > 0;
+              const max = errored ? MAX_REPEATS : plainCap;
+              assert(countOf(session, m) <= max, `${ctx}: "${m}" exceeds its repeat limit ${max}`);
+            }
+            if (statsName === "no stats") {
+              if (n === 5) {
+                for (const m of g.members)
+                  assert(countOf(session, m) === 2, `${ctx}: "${m}" must appear exactly 2 times`);
+              }
+              if (g.id === "zd") {
+                assert(
+                  new Set(session.map((q) => q.entry)).size === SESSION_LENGTH,
+                  `${ctx}: targets are not distinct`,
+                );
+                assert(!hasAdjacentDuplicates(session), `${ctx}: adjacent duplicate questions`);
+              }
+            } else {
+              gHotTotal += countOf(session, gHot);
+              gColdTotal += countOf(session, gCold);
+            }
+            for (const q of session) {
+              const kana = q.entry[alphabet];
+              const expectedAnswer = direction === "kana-to-romaji" ? q.entry.romaji : kana;
+              assert(q.options.length === OPTION_COUNT, `${ctx}: wrong option count`);
+              assert(new Set(q.options).size === OPTION_COUNT, `${ctx}: options are not unique`);
+              assert(q.options[q.correctIndex] === expectedAnswer, `${ctx}: options[correctIndex] is not the answer`);
+              assert(
+                q.options.every((o) => pool.has(o)),
+                `${ctx}: option outside the chosen alphabet/direction`,
+              );
+            }
+            groupChecked++;
+          }
+        }
+      }
+    }
+  }
+  assert(
+    gHotTotal > gColdTotal,
+    `group ${g.id}: errored char should appear more often (${gHotTotal} vs ${gColdTotal})`,
+  );
+}
+
+// Distractors come from the whole alphabet, not just the group.
+const wide = new Set();
+for (let i = 0; i < 50; i++) {
+  for (const q of buildSession(KANA, "hiragana", "kana-to-romaji", seeded(i + 1), new Map(), "a")) {
+    for (const o of q.options) wide.add(o);
+  }
+}
+assert(wide.size > 5, "distractors must come from the whole alphabet, not only the group");
+
 console.log(
-  `PASS: ${KANA.length} kana rows, ${checked} sessions checked (4 modes x 2 random sources x ${ITERATIONS}), weighted selection (errored ${hotTotal} vs error-free ${coldTotal} appearances over ${ITERATIONS} sessions)`,
+  `PASS: ${KANA.length} kana rows, ${checked} sessions checked (4 modes x 2 random sources x ${ITERATIONS}), ${groupChecked} group sessions, weighted selection (errored ${hotTotal} vs error-free ${coldTotal} appearances over ${ITERATIONS} sessions)`,
 );

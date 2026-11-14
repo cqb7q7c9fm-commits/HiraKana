@@ -24,31 +24,35 @@ export function weightOf(stat: CharStat | undefined): number {
 
 /**
  * Draws SESSION_LENGTH targets sequentially, with probability proportional to weight, from the characters whose
- * per-session cap is not exhausted (errored: MAX_REPEATS, otherwise 1). The previous target is excluded from each
- * draw, so adjacent duplicates cannot occur.
+ * per-session cap is not exhausted (errored: MAX_REPEATS, otherwise ceil(SESSION_LENGTH / pool size)). The previous
+ * target is excluded from each draw when possible; when nothing else is left, the draw repeats without the exclusion.
  */
 function pickTargets(
-  entries: readonly KanaEntry[],
+  pool: readonly KanaEntry[],
   stats: ReadonlyMap<string, CharStat>,
   random: () => number,
 ): KanaEntry[] {
-  const remaining = entries.map((entry) => {
+  const plainCap = Math.ceil(SESSION_LENGTH / pool.length);
+  const remaining = pool.map((entry) => {
     const stat = stats.get(entry.romaji);
     const errored = stat !== undefined && stat.answers > 0 && stat.errors > 0;
-    return { entry, weight: weightOf(stat), left: errored ? MAX_REPEATS : 1 };
+    return { entry, weight: weightOf(stat), left: errored ? MAX_REPEATS : plainCap };
   });
 
   const targets: KanaEntry[] = [];
   let previous: KanaEntry | undefined;
   while (targets.length < SESSION_LENGTH) {
-    const pool = remaining.filter((slot) => slot.left > 0 && slot.entry !== previous);
-    if (pool.length === 0) {
+    let candidates = remaining.filter((slot) => slot.left > 0 && slot.entry !== previous);
+    if (candidates.length === 0) {
+      candidates = remaining.filter((slot) => slot.left > 0);
+    }
+    if (candidates.length === 0) {
       throw new Error("buildSession could not select enough questions");
     }
-    const total = pool.reduce((sum, slot) => sum + slot.weight, 0);
+    const total = candidates.reduce((sum, slot) => sum + slot.weight, 0);
     let threshold = random() * total;
-    let chosen = pool[pool.length - 1];
-    for (const slot of pool) {
+    let chosen = candidates[candidates.length - 1];
+    for (const slot of candidates) {
       threshold -= slot.weight;
       if (threshold < 0) {
         chosen = slot;
@@ -62,23 +66,31 @@ function pickTargets(
   return targets;
 }
 
+/**
+ * Builds a SESSION_LENGTH-question session. Targets come from the practice group `group` (by `entry.group`) or from
+ * all `entries` when it is null; distractors always come from all `entries`.
+ */
 export function buildSession(
   entries: readonly KanaEntry[],
   alphabet: Alphabet,
   direction: Direction,
   random: () => number = Math.random,
   stats: ReadonlyMap<string, CharStat> = new Map(),
+  group: string | null = null,
 ): Question[] {
-  const minimum = Math.max(SESSION_LENGTH, OPTION_COUNT);
-  if (entries.length < minimum) {
-    throw new Error(`buildSession needs at least ${String(minimum)} entries, got ${String(entries.length)}`);
+  if (entries.length < OPTION_COUNT) {
+    throw new Error(`buildSession needs at least ${String(OPTION_COUNT)} entries, got ${String(entries.length)}`);
+  }
+  const pool = group === null ? entries : entries.filter((entry) => entry.group === group);
+  if (pool.length === 0) {
+    throw new Error(`buildSession: unknown or empty group "${String(group)}"`);
   }
 
   const kanaOf = (entry: KanaEntry) => entry[alphabet];
   const promptOf = (entry: KanaEntry) => (direction === "kana-to-romaji" ? kanaOf(entry) : entry.romaji);
   const answerOf = (entry: KanaEntry) => (direction === "kana-to-romaji" ? entry.romaji : kanaOf(entry));
 
-  const targets = pickTargets(entries, stats, random);
+  const targets = pickTargets(pool, stats, random);
 
   return targets.map((entry) => {
     const distractors = shuffle(
