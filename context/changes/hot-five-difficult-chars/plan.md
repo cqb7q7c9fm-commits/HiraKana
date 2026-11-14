@@ -179,23 +179,23 @@ Brak migracji ani zmian schematu; cofnięcie to usunięcie strony, funkcji i lin
 
 #### Manual
 
-- [x] 1.4 Zalogowany użytkownik z błędami w 3 różnych znakach widzi dokładnie te 3 pozycje, od najtrudniejszej, z poprawnymi „błędy/odpowiedzi”
-- [x] 1.5 Użytkownik bez żadnej odpowiedzi lub bez błędów w oknie widzi stan pusty z linkiem „Start practice”
-- [x] 1.6 Wejście na `/hot-5` bez logowania przekierowuje na `/auth/signin`
+- [x] 1.4 Zalogowany użytkownik z błędami w 3 różnych znakach widzi dokładnie te 3 pozycje, od najtrudniejszej, z poprawnymi „błędy/odpowiedzi” — 3ec86ca
+- [x] 1.5 Użytkownik bez żadnej odpowiedzi lub bez błędów w oknie widzi stan pusty z linkiem „Start practice” — 3ec86ca
+- [x] 1.6 Wejście na `/hot-5` bez logowania przekierowuje na `/auth/signin` — 3ec86ca
 
 ### Phase 2: Wejście z dashboardu i weryfikacja reguły
 
 #### Automated
 
-- [x] 2.1 Linting passes: `npm run lint`
-- [x] 2.2 Type checking passes: `npx astro check`
-- [x] 2.3 Production build succeeds: `npm run build`
-- [x] 2.4 Auth-flow smoke test passes against a running server: `npm run smoke`
+- [x] 2.1 Linting passes: `npm run lint` — 3ec86ca
+- [x] 2.2 Type checking passes: `npx astro check` — 3ec86ca
+- [x] 2.3 Production build succeeds: `npm run build` — 3ec86ca
+- [x] 2.4 Auth-flow smoke test passes against a running server: `npm run smoke` — 3ec86ca — 3ec86ca
 
 #### Manual
 
-- [x] 2.5 Na `/dashboard` widać link „Hot-5” prowadzący do `/hot-5`, a „Back to dashboard” wraca
-- [x] 2.6 Remis: `ka 1/1` i `ki 5/5` (oba 100%) są ułożone `ki`, potem `ka`; pełny remis rozstrzyga kolejność alfabetyczna po romaji
-- [x] 2.7 Znak z odsetkiem 0% (np. `ha 0/5`) nigdy nie pojawia się na liście
-- [x] 2.8 Sześć lub więcej znaków z błędami daje dokładnie 5 pozycji; znak spoza top-5 nie jest widoczny
-- [x] 2.9 Strona jest czytelna i dotykalna na iPhonie/iPadzie w Safari (szerokość ~375 px, bez poziomego scrolla)
+- [x] 2.5 Na `/dashboard` widać link „Hot-5” prowadzący do `/hot-5`, a „Back to dashboard” wraca — 3ec86ca
+- [x] 2.6 Remis: `ka 1/1` i `ki 5/5` (oba 100%) są ułożone `ki`, potem `ka`; pełny remis rozstrzyga kolejność alfabetyczna po romaji — 3ec86ca
+- [x] 2.7 Znak z odsetkiem 0% (np. `ha 0/5`) nigdy nie pojawia się na liście — 3ec86ca
+- [x] 2.8 Sześć lub więcej znaków z błędami daje dokładnie 5 pozycji; znak spoza top-5 nie jest widoczny — 3ec86ca
+- [x] 2.9 Strona jest czytelna i dotykalna na iPhonie/iPadzie w Safari (szerokość ~375 px, bez poziomego scrolla) — 3ec86ca
