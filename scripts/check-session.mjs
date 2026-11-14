@@ -1,6 +1,6 @@
 // Session logic check: proves the kana table and buildSession() keep their invariants.
 // Zero dependencies on purpose. Imports the .ts sources directly via Node type stripping: node scripts/check-session.mjs
-import { KANA } from "../src/lib/kana.ts";
+import { KANA, KANA_GROUPS } from "../src/lib/kana.ts";
 import { buildSession, OPTION_COUNT, SESSION_LENGTH } from "../src/lib/services/session.ts";
 
 const ITERATIONS = 500;
@@ -26,7 +26,7 @@ function seeded(seed) {
 }
 
 // Kana table
-assert(KANA.length === 46, `KANA must have 46 rows, got ${KANA.length}`);
+assert(KANA.length === 71, `KANA must have 71 rows, got ${KANA.length}`);
 for (const key of ["romaji", "hiragana", "katakana"]) {
   const values = KANA.map((e) => e[key]);
   assert(
@@ -42,6 +42,26 @@ for (const e of KANA) {
     `KANA pairing mismatch for "${e.romaji}": ${e.hiragana} / ${e.katakana}`,
   );
 }
+
+// Groups: 13 groups, every character in exactly one, each with at least 5 members.
+assert(KANA_GROUPS.length === 13, `KANA_GROUPS must have 13 groups, got ${KANA_GROUPS.length}`);
+assert(new Set(KANA_GROUPS.map((g) => g.id)).size === KANA_GROUPS.length, "KANA_GROUPS ids are not unique");
+for (const e of KANA) {
+  const owners = KANA_GROUPS.filter((g) => g.members.includes(e.romaji));
+  assert(owners.length === 1, `"${e.romaji}" must be in exactly one group, found ${owners.length}`);
+  assert(owners[0].id === e.group, `"${e.romaji}" has group "${e.group}" but is listed in "${owners[0].id}"`);
+}
+for (const g of KANA_GROUPS) {
+  assert(g.members.length >= 5, `group "${g.id}" has ${g.members.length} members, expected at least 5`);
+  assert(
+    g.members.every((m) => KANA.some((e) => e.romaji === m && e.group === g.id)),
+    `group "${g.id}" lists a member that is not in KANA with that group`,
+  );
+}
+assert(
+  KANA_GROUPS.reduce((sum, g) => sum + g.members.length, 0) === KANA.length,
+  "group members do not add up to the KANA length",
+);
 
 // Session
 const alphabets = ["hiragana", "katakana"];

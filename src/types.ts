@@ -6,6 +6,15 @@ export interface KanaEntry {
   romaji: string;
   hiragana: string;
   katakana: string;
+  /** Id of the practice group this character belongs to (see `KANA_GROUPS`). */
+  group: string;
+}
+
+/** A practice group of kana characters; `members` are romaji values. */
+export interface KanaGroup {
+  id: string;
+  label: string;
+  members: string[];
 }
 
 /** A single quiz question; `prompt` and `options` are ready to display for the chosen alphabet and direction. */
