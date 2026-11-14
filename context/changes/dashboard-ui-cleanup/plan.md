@@ -313,29 +313,29 @@ Phase 2 changes global token values. Rollback is reverting `global.css` and `Sub
 
 #### Automated
 
-- [x] 3.1 Hard-coded scan on `src/pages/dashboard.astro` returns 0 lines (was 10)
-- [x] 3.2 `dashboard.astro` imports `@/components/ui/button` and `@/components/ui/card`, and the text "only for authenticated users" is absent
-- [x] 3.3 Linting, types and build pass: `npm run lint`, `npx astro check`, `npm run build`
+- [x] 3.1 Hard-coded scan on `src/pages/dashboard.astro` returns 0 lines (was 10) — 7266d26
+- [x] 3.2 `dashboard.astro` imports `@/components/ui/button` and `@/components/ui/card`, and the text "only for authenticated users" is absent — 7266d26
+- [x] 3.3 Linting, types and build pass: `npm run lint`, `npx astro check`, `npm run build` — 7266d26
 
 #### Manual
 
-- [x] 3.4 Signed in, `/dashboard` at desktop and 390 px: "Start practice" reads as the primary action; each of the four links and Sign out works (Sign out lands on `/`)
-- [x] 3.5 Keyboard Tab through all controls shows a visible ring on each, and tab order matches visual order
-- [x] 3.6 Signed out, `/dashboard` redirects to `/auth/signin`
+- [x] 3.4 Signed in, `/dashboard` at desktop and 390 px: "Start practice" reads as the primary action; each of the four links and Sign out works (Sign out lands on `/`) — 7266d26
+- [x] 3.5 Keyboard Tab through all controls shows a visible ring on each, and tab order matches visual order — 7266d26
+- [x] 3.6 Signed out, `/dashboard` redirects to `/auth/signin` — 7266d26
 
 ### Phase 4: States and visual gate — kitchen sink
 
 #### Automated
 
-- [ ] 4.1 `src/pages/dev/kitchen-sink.astro` exists, exports `prerender = false`, and against `npm run preview` `curl -s -o /dev/null -w '%{http_code}' $BASE_URL/dev/kitchen-sink` prints `404`
-- [ ] 4.2 Hard-coded scan on `src/pages/dev/kitchen-sink.astro` and `src/pages/dashboard.astro` returns 0 lines
-- [ ] 4.3 Linting, types and build pass: `npm run lint`, `npx astro check`, `npm run build`
+- [x] 4.1 `src/pages/dev/kitchen-sink.astro` exists, exports `prerender = false`, and against `npm run preview` `curl -s -o /dev/null -w '%{http_code}' $BASE_URL/dev/kitchen-sink` prints `404`
+- [x] 4.2 Hard-coded scan on `src/pages/dev/kitchen-sink.astro` and `src/pages/dashboard.astro` returns 0 lines
+- [x] 4.3 Linting, types and build pass: `npm run lint`, `npx astro check`, `npm run build`
 
 #### Manual
 
-- [ ] 4.4 In `npm run dev`, `/dev/kitchen-sink` shows default and disabled; hover and focus-visible are demonstrated by interaction screenshots; each N/A cell states its reason
-- [ ] 4.5 Muted text on the card and primary button text are readable (minimum contrast check by eye on the screenshots)
-- [ ] 4.6 Desktop and 390 px screenshots are saved in `context/changes/dashboard-ui-cleanup/screens/`
+- [x] 4.4 In `npm run dev`, `/dev/kitchen-sink` shows default and disabled; hover and focus-visible are demonstrated by interaction screenshots; each N/A cell states its reason
+- [x] 4.5 Muted text on the card and primary button text are readable (minimum contrast check by eye on the screenshots)
+- [x] 4.6 Desktop and 390 px screenshots are saved in `context/changes/dashboard-ui-cleanup/screens/`
 
 ### Phase 5: Guard — rule and check
 

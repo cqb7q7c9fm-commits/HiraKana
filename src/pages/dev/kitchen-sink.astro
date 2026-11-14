@@ -1,0 +1,115 @@
+---
+// Dev-only visual gate for the dashboard (10x-ui, change dashboard-ui-cleanup). Never served in production builds.
+import Layout from "@/layouts/Layout.astro";
+import { buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+export const prerender = false;
+
+if (import.meta.env.PROD) {
+  return new Response(null, { status: 404 });
+}
+
+const primary = buttonVariants({ size: "lg", className: "h-12 w-full text-base" });
+const outline = buttonVariants({ variant: "outline", size: "lg", className: "h-12 w-full text-base" });
+
+const states = [
+  {
+    state: "default",
+    how: "Shown: the Default card below, built only from tokens and ui/ components.",
+    status: "shown",
+  },
+  {
+    state: "hover",
+    how: "Hover any button below. Evidence: screens/dashboard-hover-desktop.png (outline hover uses --accent).",
+    status: "interaction",
+  },
+  {
+    state: "focus-visible",
+    how: "Tab through the buttons below. Evidence: screens/dashboard-focus-outline-desktop.png (3px --ring at 50%).",
+    status: "interaction",
+  },
+  { state: "disabled", how: "Shown: the Disabled card below (native disabled attribute).", status: "shown" },
+  {
+    state: "error",
+    how: "The dashboard has no input and no action that can fail on this page (sign-out redirects to /).",
+    status: "N/A",
+  },
+  { state: "empty", how: "The dashboard fetches no data, so there is no empty list to render.", status: "N/A" },
+  {
+    state: "loading",
+    how: "The page is server-rendered with no client fetch, so there is no skeleton and no layout shift.",
+    status: "N/A",
+  },
+];
+---
+
+<Layout title="Kitchen sink">
+  <div class="bg-cosmic flex min-h-screen flex-col items-center gap-6 p-4">
+    <Card className="w-full max-w-3xl">
+      <CardHeader>
+        <CardTitle>
+          <h1 class="text-foreground text-2xl font-bold">Kitchen sink: dashboard</h1>
+        </CardTitle>
+        <CardDescription>Seven-state matrix. Dev only; returns 404 in production builds.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <table class="w-full text-left text-sm">
+          <thead>
+            <tr class="text-muted-foreground border-b">
+              <th class="py-2 pr-4 font-medium">State</th>
+              <th class="py-2 pr-4 font-medium">Status</th>
+              <th class="py-2 font-medium">Where / why</th>
+            </tr>
+          </thead>
+          <tbody>
+            {states.map((row) => (
+              <tr class="border-b align-top">
+                <td class="text-foreground py-2 pr-4 font-medium">{row.state}</td>
+                <td class="py-2 pr-4">{row.status}</td>
+                <td class="text-muted-foreground py-2">{row.how}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </CardContent>
+    </Card>
+
+    <div class="grid w-full max-w-3xl gap-6 sm:grid-cols-2">
+      <Card>
+        <CardHeader>
+          <CardTitle>Default</CardTitle>
+          <CardDescription>Hover and Tab here.</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-3">
+          <a href="#kitchen-sink" class:list={primary}>
+            Start practice
+          </a>
+          <a href="#kitchen-sink" class:list={outline}>
+            Results
+          </a>
+          <button type="button" class:list={outline}>
+            Sign out
+          </button>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Disabled</CardTitle>
+          <CardDescription>Native disabled attribute.</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-3">
+          <button type="button" disabled class:list={primary}>
+            Start practice
+          </button>
+          <button type="button" disabled class:list={outline}>
+            Results
+          </button>
+          <button type="button" disabled class:list={outline}>
+            Sign out
+          </button>
+        </CardContent>
+      </Card>
+    </div>
+  </div>
+</Layout>
