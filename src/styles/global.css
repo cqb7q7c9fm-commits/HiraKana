@@ -6,7 +6,7 @@
 /*
  * Cosmic palette (the app is dark-only: <html> never gets the `dark` class, so `.dark` mirrors `:root`).
  * Source: existing repo literals — #0a0e1a / #0f1529 (the old bg-cosmic gradient) and Tailwind purple-600 / purple-400.
- * Raw before/after values: context/changes/dashboard-ui-cleanup/tokens.md
+ * Raw before/after values: context/archive/2026-11-14-dashboard-ui-cleanup/tokens.md
  */
 :root,
 .dark {

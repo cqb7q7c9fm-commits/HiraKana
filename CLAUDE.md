@@ -44,12 +44,12 @@ Full server-side rendering (`output: "server"` in astro.config.mjs). All pages a
 
 ### UI
 
-- **Tokens**: values live in `src/styles/global.css` (`:root`/`.dark`, published by `@theme inline`). The app is dark-only (cosmic palette); raw values and their source are in `context/changes/dashboard-ui-cleanup/tokens.md`.
+- **Tokens**: values live in `src/styles/global.css` (`:root`/`.dark`, published by `@theme inline`). The app is dark-only (cosmic palette); raw values and their source are in `context/archive/2026-11-14-dashboard-ui-cleanup/tokens.md`.
 - **Components**: check `src/components/ui/` before creating one; add missing ones with `npx shadcn@latest add <name>`. After the CLI runs, check that the new file imports `cn` from `@/lib/utils` and that `package.json` gained no stray `cn` dependency (the CLI has generated both).
 - **No literal colours, palette classes or arbitrary values in views** (`bg-purple-600`, `text-blue-100/80`, `w-[123px]`, hex/rgb): use role tokens (`bg-card`, `text-muted-foreground`, `bg-primary`, `border-border`). Do not pass palette classes to `Button` through `className`.
 - **Buttons/links in `.astro`**: `Button asChild` does not work from Astro (children arrive as a static wrapper), so use `buttonVariants()` from `@/components/ui/button` on a plain `<a>`/`<button>`. React components get `className`, Astro elements get `class`/`class:list`.
 - **Visual gate**: `/dev/kitchen-sink` (dev only, 404 in production) shows the 7-state matrix; screenshots live in `context/changes/<change-id>/screens/`.
-- **Check**: `npm run check:ui` scans the views listed in `scripts/check-hardcoded-ui.mjs` (`CLEANED_VIEWS`) and runs on commit via lint-staged. Add a view to that list, and to `lint-staged` in `package.json`, when you clean it. Other views still contain legacy `bg-cosmic`/palette classes (deferred in `context/changes/dashboard-ui-cleanup/research.md`, charge C5); do not copy them into new code.
+- **Check**: `npm run check:ui` scans the views listed in `scripts/check-hardcoded-ui.mjs` (`CLEANED_VIEWS`) and runs on commit via lint-staged. Add a view to that list, and to `lint-staged` in `package.json`, when you clean it. Other views still contain legacy `bg-cosmic`/palette classes (deferred in `context/archive/2026-11-14-dashboard-ui-cleanup/research.md`, charge C5); do not copy them into new code.
 
 ### Environment
 
