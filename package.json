@@ -11,7 +11,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "smoke": "node scripts/smoke.mjs",
-    "check:session": "node scripts/check-session.mjs"
+    "check:session": "node scripts/check-session.mjs",
+    "check:ui": "node scripts/check-hardcoded-ui.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.12",
@@ -59,6 +60,9 @@
   "lint-staged": {
     "*.{ts,tsx,astro}": [
       "eslint --fix"
+    ],
+    "src/pages/{dashboard,dev/kitchen-sink}.astro": [
+      "node scripts/check-hardcoded-ui.mjs"
     ],
     "*.{json,css,md}": [
       "prettier --write"

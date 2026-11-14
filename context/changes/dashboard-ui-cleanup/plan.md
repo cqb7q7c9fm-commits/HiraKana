@@ -327,26 +327,26 @@ Phase 2 changes global token values. Rollback is reverting `global.css` and `Sub
 
 #### Automated
 
-- [x] 4.1 `src/pages/dev/kitchen-sink.astro` exists, exports `prerender = false`, and against `npm run preview` `curl -s -o /dev/null -w '%{http_code}' $BASE_URL/dev/kitchen-sink` prints `404`
-- [x] 4.2 Hard-coded scan on `src/pages/dev/kitchen-sink.astro` and `src/pages/dashboard.astro` returns 0 lines
-- [x] 4.3 Linting, types and build pass: `npm run lint`, `npx astro check`, `npm run build`
+- [x] 4.1 `src/pages/dev/kitchen-sink.astro` exists, exports `prerender = false`, and against `npm run preview` `curl -s -o /dev/null -w '%{http_code}' $BASE_URL/dev/kitchen-sink` prints `404` — a987285
+- [x] 4.2 Hard-coded scan on `src/pages/dev/kitchen-sink.astro` and `src/pages/dashboard.astro` returns 0 lines — a987285
+- [x] 4.3 Linting, types and build pass: `npm run lint`, `npx astro check`, `npm run build` — a987285
 
 #### Manual
 
-- [x] 4.4 In `npm run dev`, `/dev/kitchen-sink` shows default and disabled; hover and focus-visible are demonstrated by interaction screenshots; each N/A cell states its reason
-- [x] 4.5 Muted text on the card and primary button text are readable (minimum contrast check by eye on the screenshots)
-- [x] 4.6 Desktop and 390 px screenshots are saved in `context/changes/dashboard-ui-cleanup/screens/`
+- [x] 4.4 In `npm run dev`, `/dev/kitchen-sink` shows default and disabled; hover and focus-visible are demonstrated by interaction screenshots; each N/A cell states its reason — a987285
+- [x] 4.5 Muted text on the card and primary button text are readable (minimum contrast check by eye on the screenshots) — a987285
+- [x] 4.6 Desktop and 390 px screenshots are saved in `context/changes/dashboard-ui-cleanup/screens/` — a987285
 
 ### Phase 5: Guard — rule and check
 
 #### Automated
 
-- [ ] 5.1 `node scripts/check-hardcoded-ui.mjs src/pages/dashboard.astro` exits 0, and exits 1 on a throwaway file containing `bg-purple-600`
-- [ ] 5.2 `package.json` contains the `lint-staged` entry for the script and the `check:ui` script
-- [ ] 5.3 `CLAUDE.md` has the `### UI` block and passes `npx prettier --check CLAUDE.md`
-- [ ] 5.4 Build and smoke pass: `npm run build` and `npm run smoke` (needs `npx supabase start` and `npm run preview`)
+- [x] 5.1 `node scripts/check-hardcoded-ui.mjs src/pages/dashboard.astro` exits 0, and exits 1 on a throwaway file containing `bg-purple-600`
+- [x] 5.2 `package.json` contains the `lint-staged` entry for the script and the `check:ui` script
+- [x] 5.3 `CLAUDE.md` has the `### UI` block and passes `npx prettier --check CLAUDE.md`
+- [x] 5.4 Build and smoke pass: `npm run build` and `npm run smoke` (needs `npx supabase start` and `npm run preview`)
 
 #### Manual
 
 - [ ] 5.5 `/10x-impl-review dashboard-ui-cleanup` was run and every UI finding is fixed or recorded as deferred with a reason
-- [ ] 5.6 The merge checklist `.claude/skills/10x-ui/references/ui-quality-checklist.md` was walked, and CI is not treated as the gate
+- [x] 5.6 The merge checklist `.claude/skills/10x-ui/references/ui-quality-checklist.md` was walked, and CI is not treated as the gate
