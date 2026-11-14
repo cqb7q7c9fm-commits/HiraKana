@@ -1,7 +1,7 @@
 // Session logic check: proves the kana table and buildSession() keep their invariants.
 // Zero dependencies on purpose. Imports the .ts sources directly via Node type stripping: node scripts/check-session.mjs
 import { KANA, KANA_GROUPS } from "../src/lib/kana.ts";
-import { buildSession, OPTION_COUNT, SESSION_LENGTH } from "../src/lib/services/session.ts";
+import { buildSession, MAX_REPEATS, OPTION_COUNT, SESSION_LENGTH, weightOf } from "../src/lib/services/session.ts";
 
 const ITERATIONS = 500;
 
@@ -135,4 +135,60 @@ try {
 }
 assert(threw, "buildSession must throw for too few entries");
 
-console.log(`PASS: ${KANA.length} kana rows, ${checked} sessions checked (4 modes x 2 random sources x ${ITERATIONS})`);
+// Weighted selection.
+assert(weightOf(undefined) === 1, "weightOf(undefined) must be 1");
+assert(weightOf({ romaji: "a", answers: 5, errors: 5 }) === 4, "weightOf with errors === answers must be 4");
+assert(weightOf({ romaji: "a", answers: 5, errors: 0 }) === 1, "weightOf with errors 0 must be 1");
+assert(weightOf({ romaji: "a", answers: 0, errors: 0 }) === 1, "weightOf with answers 0 must be 1");
+assert(weightOf({ romaji: "a", answers: 4, errors: 2 }) === 2.5, "weightOf with half errors must be 2.5");
+
+const emptyStats = new Map();
+const hot = KANA[0].romaji;
+const cold = KANA[1].romaji;
+const hotStats = new Map([
+  [hot, { romaji: hot, answers: 5, errors: 5 }],
+  [cold, { romaji: cold, answers: 5, errors: 0 }],
+]);
+// Several errored characters to stress adjacent-duplicate avoidance.
+const manyHotStats = new Map(KANA.slice(0, 4).map((e) => [e.romaji, { romaji: e.romaji, answers: 5, errors: 5 }]));
+
+const hasAdjacentDuplicates = (session) => session.some((q, idx) => idx > 0 && session[idx - 1].entry === q.entry);
+const countOf = (session, romaji) => session.filter((q) => q.entry.romaji === romaji).length;
+
+let hotTotal = 0;
+let coldTotal = 0;
+for (let i = 0; i < ITERATIONS; i++) {
+  // (a) empty map keeps the unweighted guarantees
+  const plain = buildSession(KANA, "hiragana", "kana-to-romaji", seeded(i + 1), emptyStats);
+  assert(plain.length === SESSION_LENGTH, `empty stats#${i}: wrong session length`);
+  assert(new Set(plain.map((q) => q.entry)).size === SESSION_LENGTH, `empty stats#${i}: entries are not distinct`);
+
+  // (b) + (c)
+  const session = buildSession(KANA, "hiragana", "kana-to-romaji", seeded(i + 1), hotStats);
+  assert(session.length === SESSION_LENGTH, `hot stats#${i}: wrong session length`);
+  assert(countOf(session, hot) <= MAX_REPEATS, `hot stats#${i}: errored char exceeds ${MAX_REPEATS} repeats`);
+  assert(countOf(session, cold) <= 1, `hot stats#${i}: error-free char appears more than once`);
+  hotTotal += countOf(session, hot);
+  coldTotal += countOf(session, cold);
+
+  // (d)
+  for (const stats of [emptyStats, hotStats, manyHotStats]) {
+    const s = buildSession(KANA, "katakana", "romaji-to-kana", seeded(i + 1), stats);
+    assert(s.length === SESSION_LENGTH, `stress#${i}: wrong session length`);
+    assert(!hasAdjacentDuplicates(s), `stress#${i}: adjacent duplicate questions`);
+  }
+  const many = buildSession(KANA, "hiragana", "kana-to-romaji", seeded(i + 1), manyHotStats);
+  for (const e of KANA) {
+    const max = manyHotStats.has(e.romaji) ? MAX_REPEATS : 1;
+    assert(countOf(many, e.romaji) <= max, `many hot#${i}: "${e.romaji}" exceeds its repeat limit`);
+  }
+}
+assert(
+  hotTotal >= 2 * coldTotal,
+  `errored char should appear >= 2x as often as an error-free one (${hotTotal} vs ${coldTotal})`,
+);
+assert(hotTotal > 0, "errored char never appeared");
+
+console.log(
+  `PASS: ${KANA.length} kana rows, ${checked} sessions checked (4 modes x 2 random sources x ${ITERATIONS}), weighted selection (errored ${hotTotal} vs error-free ${coldTotal} appearances over ${ITERATIONS} sessions)`,
+);

@@ -31,6 +31,13 @@ export interface AnswerRecord {
   chosenIndex: number;
 }
 
+/** Recent answer statistics for one character; `answers` counts the considered (last <= 5) answers, `errors` <= `answers`. */
+export interface CharStat {
+  romaji: string;
+  answers: number;
+  errors: number;
+}
+
 export type PracticeStep = "setup" | "question" | "feedback" | "summary";
 
 /** A saved practice session as exposed to the client. */
