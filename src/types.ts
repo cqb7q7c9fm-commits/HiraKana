@@ -15,3 +15,11 @@ export interface Question {
   options: string[];
   correctIndex: number;
 }
+
+/** A recorded answer: the question and the option index the user chose. */
+export interface AnswerRecord {
+  question: Question;
+  chosenIndex: number;
+}
+
+export type PracticeStep = "setup" | "question" | "feedback" | "summary";

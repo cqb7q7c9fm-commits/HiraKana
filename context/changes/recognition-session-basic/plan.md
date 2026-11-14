@@ -239,29 +239,29 @@ Nie dotyczy: brak zmian w bazie i w istniejących danych. S-02 doda wysyłanie o
 
 #### Automated
 
-- [x] 1.1 Niezmienniki sesji i tabeli znaków przechodzą: `npm run check:session`
-- [x] 1.2 Linting przechodzi: `npm run lint`
-- [x] 1.3 Sprawdzenie typów przechodzi: `npx astro check`
+- [x] 1.1 Niezmienniki sesji i tabeli znaków przechodzą: `npm run check:session` — d16e000
+- [x] 1.2 Linting przechodzi: `npm run lint` — d16e000
+- [x] 1.3 Sprawdzenie typów przechodzi: `npx astro check` — d16e000
 
 #### Manual
 
-- [x] 1.4 Tabela `KANA` jest zgodna z tabelą gojūon (46 wierszy, Hepburn, `wo`, `n`) po przeglądzie w pliku
+- [x] 1.4 Tabela `KANA` jest zgodna z tabelą gojūon (46 wierszy, Hepburn, `wo`, `n`) po przeglądzie w pliku — d16e000
 
 ### Phase 2: Strona /practice i interfejs sesji
 
 #### Automated
 
-- [ ] 2.1 Niezmienniki sesji nadal przechodzą: `npm run check:session`
-- [ ] 2.2 Linting przechodzi: `npm run lint`
-- [ ] 2.3 Sprawdzenie typów przechodzi: `npx astro check`
-- [ ] 2.4 Build produkcyjny przechodzi: `npm run build`
+- [x] 2.1 Niezmienniki sesji nadal przechodzą: `npm run check:session`
+- [x] 2.2 Linting przechodzi: `npm run lint`
+- [x] 2.3 Sprawdzenie typów przechodzi: `npx astro check`
+- [x] 2.4 Build produkcyjny przechodzi: `npm run build`
 
 #### Manual
 
-- [ ] 2.5 Pełna sesja przechodzi dla hiragany w kierunku znak → zapis łaciński (10 pytań, wynik na końcu)
-- [ ] 2.6 Pełna sesja przechodzi dla katakany w kierunku zapis łaciński → znak
-- [ ] 2.7 Błędna odpowiedź jest oznaczona „Incorrect” z poprawną parą i trafia na listę pomyłek w podsumowaniu
-- [ ] 2.8 „Practice again” i „Change settings” działają, a nowa sesja losuje inne pytania
+- [x] 2.5 Pełna sesja przechodzi dla hiragany w kierunku znak → zapis łaciński (10 pytań, wynik na końcu)
+- [x] 2.6 Pełna sesja przechodzi dla katakany w kierunku zapis łaciński → znak
+- [x] 2.7 Błędna odpowiedź jest oznaczona „Incorrect” z poprawną parą i trafia na listę pomyłek w podsumowaniu
+- [x] 2.8 „Practice again” i „Change settings” działają, a nowa sesja losuje inne pytania
 
 ### Phase 3: Weryfikacja i domknięcie wycinka
 

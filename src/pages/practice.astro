@@ -1,0 +1,12 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import PracticeApp from "@/components/practice/PracticeApp";
+---
+
+<Layout title="Practice">
+  <div class="bg-cosmic flex min-h-screen items-start justify-center p-4 sm:items-center">
+    <div class="w-full max-w-xl rounded-2xl border border-white/10 bg-white/10 p-6 text-white backdrop-blur-xl sm:p-8">
+      <PracticeApp client:load />
+    </div>
+  </div>
+</Layout>
