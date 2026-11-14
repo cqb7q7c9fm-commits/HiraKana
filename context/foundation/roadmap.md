@@ -47,7 +47,7 @@ Użytkownikowi trudno zapamiętać znaki hiragany i katakany, a brak ich znajomo
 | S-03 | error-weighted-repeats    | dostawać błędne znaki częściej niż opanowane                               | S-02          | FR-006                                        | done        |
 | S-04 | group-practice            | ćwiczyć znaki w grupach (np. grupa K)                                      | S-01          | FR-009, FR-013                                | in-progress |
 | S-05 | group-mastery-view        | zobaczyć opanowanie grup i siłę znajomości w 3-stopniowej skali            | S-02, S-04    | FR-010, FR-011                                | blocked     |
-| S-06 | hot-five-difficult-chars  | zobaczyć „hot-5” — 5 najtrudniejszych znaków                               | S-02          | FR-012                                        | in-progress |
+| S-06 | hot-five-difficult-chars  | zobaczyć „hot-5” — 5 najtrudniejszych znaków                               | S-02          | FR-012                                        | done        |
 
 ## Streams
 
@@ -183,7 +183,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Mały, samodzielny widok oparty na statystykach per znak z S-02; po stronie ryzyka — na początku lista jest przypadkowa przy małej liczbie odpowiedzi.
-- **Status:** in-progress
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -230,3 +230,4 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **S-01: user can zalogować się e-mailem, wybrać alfabet (hiragana lub katakana) i kierunek nauki, przejść sesję 10–15 znaków z 4 opcjami odpowiedzi i po każdej odpowiedzi zobaczyć, czy była dobra.** — Archived 2026-11-14 → `context/archive/2026-11-14-recognition-session-basic/`. Lesson: —.
 - **S-02: user can zobaczyć zapisany wynik sesji; każda odpowiedź jest przypisana do znaku, także błędna (zgodnie z US-01).** — Archived 2026-11-14 → `context/archive/2026-11-14-save-session-results/`. Lesson: —.
 - **S-03: user can dostawać w sesji znaki, w których się mylił, częściej niż znaki opanowane.** — Archived 2026-11-14 → `context/archive/2026-11-14-error-weighted-repeats/`. Lesson: —.
+- **S-06: user can zobaczyć 5 znaków, w których myli się najczęściej.** — Archived 2026-11-14 → `context/archive/2026-11-14-hot-five-difficult-chars/`. Lesson: —.
