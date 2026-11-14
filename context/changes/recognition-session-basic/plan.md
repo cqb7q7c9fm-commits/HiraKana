@@ -251,28 +251,28 @@ Nie dotyczy: brak zmian w bazie i w istniejących danych. S-02 doda wysyłanie o
 
 #### Automated
 
-- [x] 2.1 Niezmienniki sesji nadal przechodzą: `npm run check:session`
-- [x] 2.2 Linting przechodzi: `npm run lint`
-- [x] 2.3 Sprawdzenie typów przechodzi: `npx astro check`
-- [x] 2.4 Build produkcyjny przechodzi: `npm run build`
+- [x] 2.1 Niezmienniki sesji nadal przechodzą: `npm run check:session` — 4b3afde
+- [x] 2.2 Linting przechodzi: `npm run lint` — 4b3afde
+- [x] 2.3 Sprawdzenie typów przechodzi: `npx astro check` — 4b3afde
+- [x] 2.4 Build produkcyjny przechodzi: `npm run build` — 4b3afde
 
 #### Manual
 
-- [x] 2.5 Pełna sesja przechodzi dla hiragany w kierunku znak → zapis łaciński (10 pytań, wynik na końcu)
-- [x] 2.6 Pełna sesja przechodzi dla katakany w kierunku zapis łaciński → znak
-- [x] 2.7 Błędna odpowiedź jest oznaczona „Incorrect” z poprawną parą i trafia na listę pomyłek w podsumowaniu
-- [x] 2.8 „Practice again” i „Change settings” działają, a nowa sesja losuje inne pytania
+- [x] 2.5 Pełna sesja przechodzi dla hiragany w kierunku znak → zapis łaciński (10 pytań, wynik na końcu) — 4b3afde
+- [x] 2.6 Pełna sesja przechodzi dla katakany w kierunku zapis łaciński → znak — 4b3afde
+- [x] 2.7 Błędna odpowiedź jest oznaczona „Incorrect” z poprawną parą i trafia na listę pomyłek w podsumowaniu — 4b3afde
+- [x] 2.8 „Practice again” i „Change settings” działają, a nowa sesja losuje inne pytania — 4b3afde
 
 ### Phase 3: Weryfikacja i domknięcie wycinka
 
 #### Automated
 
-- [ ] 3.1 Smoke przechodzi na działającym serwerze: `npm run smoke`
-- [ ] 3.2 Build produkcyjny przechodzi: `npm run build`
-- [ ] 3.3 Linting i typy przechodzą: `npm run lint && npx astro check`
+- [x] 3.1 Smoke przechodzi na działającym serwerze: `npm run smoke`
+- [x] 3.2 Build produkcyjny przechodzi: `npm run build`
+- [x] 3.3 Linting i typy przechodzą: `npm run lint && npx astro check`
 
 #### Manual
 
-- [ ] 3.4 Na szerokości iPhone’a (≈390 px) strona `/practice` nie ma poziomego przewijania, a przyciski opcji są wygodne do trafienia kciukiem
-- [ ] 3.5 Na szerokości iPada (≈820 px) układ jest czytelny, a znak w pytaniu wyraźnie duży
-- [ ] 3.6 Niezalogowany użytkownik wchodzący na `/practice` trafia na `/auth/signin`
+- [x] 3.4 Na szerokości iPhone’a (≈390 px) strona `/practice` nie ma poziomego przewijania, a przyciski opcji są wygodne do trafienia kciukiem
+- [x] 3.5 Na szerokości iPada (≈820 px) układ jest czytelny, a znak w pytaniu wyraźnie duży
+- [x] 3.6 Niezalogowany użytkownik wchodzący na `/practice` trafia na `/auth/signin`
