@@ -46,7 +46,7 @@ Użytkownikowi trudno zapamiętać znaki hiragany i katakany, a brak ich znajomo
 | S-02 | save-session-results      | zobaczyć zapisany wynik sesji, z odpowiedziami przypisanymi do znaków      | S-01          | US-01, FR-007, FR-013                         | done        |
 | S-03 | error-weighted-repeats    | dostawać błędne znaki częściej niż opanowane                               | S-02          | FR-006                                        | done        |
 | S-04 | group-practice            | ćwiczyć znaki w grupach (np. grupa K)                                      | S-01          | FR-009, FR-013                                | done        |
-| S-05 | group-mastery-view        | zobaczyć opanowanie grup i siłę znajomości w 3-stopniowej skali            | S-02, S-04    | FR-010, FR-011                                | in-progress |
+| S-05 | group-mastery-view        | zobaczyć opanowanie grup i siłę znajomości w 3-stopniowej skali            | S-02, S-04    | FR-010, FR-011                                | done        |
 | S-06 | hot-five-difficult-chars  | zobaczyć „hot-5” — 5 najtrudniejszych znaków                               | S-02          | FR-012                                        | done        |
 
 ## Streams
@@ -171,7 +171,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
   - Definicja „siły znajomości”, progów 3-stopniowej skali i kryterium „grupa opanowana” — Owner: user. Block: yes.
   - Drugi sygnał poza kolorem dla osób z zaburzeniami widzenia barw — Owner: user. Block: no.
 - **Risk:** Najcięższy ekran MVP według rundy wyzwań PRD; zależy od grup i od nierozstrzygniętych progów, więc jest sekwencjonowany na końcu.
-- **Status:** in-progress
+- **Status:** done
 
 ### S-06: Hot-5 — najtrudniejsze znaki
 
@@ -194,7 +194,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-02       | save-session-results      | Zapis wyniku sesji i odpowiedzi per znak                  | no                    | Czeka na S-01                           |
 | S-03       | error-weighted-repeats    | Częstsze powtórki błędnych znaków                         | no                    | Czeka na S-02                           |
 | S-04       | group-practice            | Ćwiczenie znaków w grupach                                | no                    | Czeka na S-01 (grupy zdefiniowane)      |
-| S-05       | group-mastery-view        | Widok opanowania grup i siły znajomości                   | no                    | Progi rozstrzygnięte; w realizacji       |
+| S-05       | group-mastery-view        | Widok opanowania grup i siły znajomości                   | no                    | Zrealizowany                            |
 | S-06       | hot-five-difficult-chars  | Widok hot-5 najtrudniejszych znaków                       | no                    | Czeka na S-02                           |
 
 ## Open Roadmap Questions
@@ -232,3 +232,4 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **S-03: user can dostawać w sesji znaki, w których się mylił, częściej niż znaki opanowane.** — Archived 2026-11-14 → `context/archive/2026-11-14-error-weighted-repeats/`. Lesson: —.
 - **S-06: user can zobaczyć 5 znaków, w których myli się najczęściej.** — Archived 2026-11-14 → `context/archive/2026-11-14-hot-five-difficult-chars/`. Lesson: —.
 - **S-04: user can ćwiczyć znaki w grupach (np. grupa K: ka, ki, ku, ke, ko); powtórki liczą się i do znaku, i do grupy.** — Archived 2026-11-14 → `context/archive/2026-11-14-group-practice/`. Lesson: —.
+- **S-05: user can zobaczyć, które grupy ma opanowane, oraz siłę znajomości grupy i znaku w 3-stopniowej skali kolorów.** — Archived 2026-11-14 → `context/archive/2026-11-14-group-mastery-view/`. Lesson: —.
