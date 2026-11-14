@@ -248,16 +248,16 @@ Jedna migracja dodająca indeks i funkcję; brak zmian danych, brak backfillu. W
 
 #### Automated
 
-- [x] 3.1 Linting przechodzi: `npm run lint`
-- [x] 3.2 Sprawdzanie typów przechodzi: `npx astro check`
-- [x] 3.3 Build przechodzi: `npm run build`
-- [x] 3.4 Skrypt logiki sesji przechodzi: `npm run check:session`
-- [x] 3.5 Smoke test przechodzi: `npm run smoke`
+- [x] 3.1 Linting przechodzi: `npm run lint` — 7b2fa15
+- [x] 3.2 Sprawdzanie typów przechodzi: `npx astro check` — 7b2fa15
+- [x] 3.3 Build przechodzi: `npm run build` — 7b2fa15
+- [x] 3.4 Skrypt logiki sesji przechodzi: `npm run check:session` — 7b2fa15
+- [x] 3.5 Smoke test przechodzi: `npm run smoke` — 7b2fa15
 
 #### Manual
 
-- [ ] 3.6 Nowy użytkownik (bez historii) dostaje sesję 10 unikalnych znaków
-- [ ] 3.7 Po sesji z 2–3 pomyłkami kolejna sesja zawiera te znaki 2–3 razy, a znaki bez błędów co najwyżej raz
-- [ ] 3.8 Po serii poprawnych odpowiedzi na wcześniej błędny znak (ostatnie 5 poprawne) wraca on do pojedynczego występowania
-- [ ] 3.9 Przy zablokowanym lub zwracającym 500 `GET /api/practice/stats` sesja startuje normalnie, bez powtórzeń i bez komunikatu błędu
-- [ ] 3.10 Szybkie podwójne kliknięcie „start” nie tworzy dwóch sesji
+- [x] 3.6 Nowy użytkownik (bez historii) dostaje sesję 10 unikalnych znaków — 7b2fa15
+- [x] 3.7 Po sesji z 2–3 pomyłkami kolejna sesja zawiera te znaki 2–3 razy, a znaki bez błędów co najwyżej raz — 7b2fa15
+- [x] 3.8 Po serii poprawnych odpowiedzi na wcześniej błędny znak (ostatnie 5 poprawne) wraca on do pojedynczego występowania — 7b2fa15
+- [x] 3.9 Przy zablokowanym lub zwracającym 500 `GET /api/practice/stats` sesja startuje normalnie, bez powtórzeń i bez komunikatu błędu — 7b2fa15
+- [x] 3.10 Szybkie podwójne kliknięcie „start” nie tworzy dwóch sesji — 7b2fa15

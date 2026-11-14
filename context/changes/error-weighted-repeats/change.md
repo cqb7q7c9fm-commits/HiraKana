@@ -1,7 +1,7 @@
 ---
 change_id: error-weighted-repeats
 title: Error weighted repeats
-status: implementing
+status: implemented
 created: 2026-11-14
 updated: 2026-11-14
 archived_at: null
