@@ -34,3 +34,10 @@ After: `linear-gradient(to bottom, var(--background), var(--popover), var(--back
 
 Note: Tailwind publishes purple-600 at chroma 0.288 (outside sRGB); browsers gamut-map it, so it matches `bg-purple-600`
 exactly as before.
+
+## Known limitation (impl-review F1)
+
+`<html>` never gets the `dark` class, so every `dark:` variant in `ui/button.tsx` is inert. The outline variant renders
+`bg-background` + `border` (an opaque navy fill), not the `dark:bg-input/30` glass look. `variant="destructive"` is
+white on `--destructive` (`oklch(0.704 0.191 22.216)`, roughly 2.8:1): when the first destructive Button is added,
+darken `--destructive` for this dark-only palette (and re-check contrast) instead of adding `class="dark"` to `<html>`.

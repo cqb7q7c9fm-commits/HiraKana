@@ -9,14 +9,15 @@ const CLEANED_VIEWS = ["src/pages/dashboard.astro", "src/pages/dev/kitchen-sink.
 
 const PALETTE =
   "slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|white|black";
-const UTILITY = "bg|text|border|ring|outline|from|via|to|fill|stroke|shadow|divide";
+const UTILITY =
+  "bg|text|border|ring|ring-offset|outline|from|via|to|fill|stroke|shadow|inset-shadow|divide|accent|caret|decoration|placeholder";
 const HARDCODED = new RegExp(
   [
-    "#[0-9a-fA-F]{3,8}\\b",
+    "(?<!href=[\"'])#[0-9a-fA-F]{3,8}\\b",
     "rgba?\\(",
     "hsla?\\(",
     "oklch\\(",
-    "-\\[[0-9.]+(px|rem)\\]",
+    "-\\[-?[0-9.]+(px|rem|em|vh|vw|%)\\]",
     `\\b(${UTILITY})-(${PALETTE})\\b`,
   ].join("|"),
 );
@@ -25,14 +26,20 @@ const files = process.argv.length > 2 ? process.argv.slice(2) : CLEANED_VIEWS;
 let hits = 0;
 
 for (const file of files) {
-  readFileSync(file, "utf8")
-    .split("\n")
-    .forEach((line, index) => {
-      if (HARDCODED.test(line)) {
-        hits++;
-        console.error(`${file}:${index + 1}: ${line.trim()}`);
-      }
-    });
+  let source;
+  try {
+    source = readFileSync(file, "utf8");
+  } catch (error) {
+    hits++;
+    console.error(`${file}: cannot read (${error instanceof Error ? error.message : String(error)})`);
+    continue;
+  }
+  source.split("\n").forEach((line, index) => {
+    if (HARDCODED.test(line)) {
+      hits++;
+      console.error(`${file}:${index + 1}: ${line.trim()}`);
+    }
+  });
 }
 
 if (hits > 0) {

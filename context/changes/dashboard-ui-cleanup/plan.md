@@ -341,12 +341,12 @@ Phase 2 changes global token values. Rollback is reverting `global.css` and `Sub
 
 #### Automated
 
-- [x] 5.1 `node scripts/check-hardcoded-ui.mjs src/pages/dashboard.astro` exits 0, and exits 1 on a throwaway file containing `bg-purple-600`
-- [x] 5.2 `package.json` contains the `lint-staged` entry for the script and the `check:ui` script
-- [x] 5.3 `CLAUDE.md` has the `### UI` block and passes `npx prettier --check CLAUDE.md`
-- [x] 5.4 Build and smoke pass: `npm run build` and `npm run smoke` (needs `npx supabase start` and `npm run preview`)
+- [x] 5.1 `node scripts/check-hardcoded-ui.mjs src/pages/dashboard.astro` exits 0, and exits 1 on a throwaway file containing `bg-purple-600` — 2d6abbd
+- [x] 5.2 `package.json` contains the `lint-staged` entry for the script and the `check:ui` script — 2d6abbd
+- [x] 5.3 `CLAUDE.md` has the `### UI` block and passes `npx prettier --check CLAUDE.md` — 2d6abbd
+- [x] 5.4 Build and smoke pass: `npm run build` and `npm run smoke` (needs `npx supabase start` and `npm run preview`) — 2d6abbd
 
 #### Manual
 
-- [ ] 5.5 `/10x-impl-review dashboard-ui-cleanup` was run and every UI finding is fixed or recorded as deferred with a reason
-- [x] 5.6 The merge checklist `.claude/skills/10x-ui/references/ui-quality-checklist.md` was walked, and CI is not treated as the gate
+- [x] 5.5 `/10x-impl-review dashboard-ui-cleanup` was run and every UI finding is fixed or recorded as deferred with a reason
+- [x] 5.6 The merge checklist `.claude/skills/10x-ui/references/ui-quality-checklist.md` was walked, and CI is not treated as the gate — 2d6abbd
