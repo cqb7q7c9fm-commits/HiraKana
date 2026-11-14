@@ -181,7 +181,7 @@ Wybór grupy na ekranie ustawień, przekazanie jej przez hook oraz poprawka list
 
 #### Manual Verification:
 
-- Na `/practice` wybór grupy K daje 10 pytań, każdy z pięciu znaków dokładnie 2 razy, a opcje zawierają znaki spoza grupy (dotyczy konta bez historii błędów w grupie K; ze statystyką błędów znak z błędami pada do 3 razy, a pozostałe po 1–2, zgodnie z regułą S-03)
+- Na `/practice` wybór grupy K daje 10 pytań, każdy z pięciu znaków dokładnie 2 razy, a wszystkie 4 opcje pochodzą z grupy K, nie ze znaków spoza niej (korekta po teście ręcznym; tytuł wiersza 3.5 w Progress zachowany bez zmian) (dotyczy konta bez historii błędów w grupie K; ze statystyką błędów znak z błędami pada do 3 razy, a pozostałe po 1–2, zgodnie z regułą S-03)
 - Grupa Z/D daje 10 różnych znaków, a ぢ/づ pytają i odpowiadają „di”/„du” w obu kierunkach
 - „Practice again” zachowuje grupę, „Change settings” wraca do ekranu z zachowanym wyborem
 - Znak pomylony dwa razy pojawia się na liście „Characters to review” jeden raz, a wynik X/10 liczy oba błędy
@@ -259,16 +259,16 @@ Brak migracji bazy. Istniejące odpowiedzi z S-02 zawierają tylko znaki podstaw
 
 #### Automated
 
-- [x] 3.1 Niezmienniki sesji nadal przechodzą: `npm run check:session`
-- [x] 3.2 Linting i typy przechodzą: `npm run lint && npx astro check`
-- [x] 3.3 Build produkcyjny przechodzi: `npm run build`
-- [x] 3.4 Smoke z odpowiedzią „di” przechodzi na działającym serwerze z lokalnym Supabase: `npm run smoke`
+- [x] 3.1 Niezmienniki sesji nadal przechodzą: `npm run check:session` — 3ec86ca
+- [x] 3.2 Linting i typy przechodzą: `npm run lint && npx astro check` — 3ec86ca
+- [x] 3.3 Build produkcyjny przechodzi: `npm run build` — 3ec86ca
+- [x] 3.4 Smoke z odpowiedzią „di” przechodzi na działającym serwerze z lokalnym Supabase: `npm run smoke` — 3ec86ca
 
 #### Manual
 
-- [ ] 3.5 Na `/practice` wybór grupy K daje 10 pytań, każdy z pięciu znaków dokładnie 2 razy, a opcje zawierają znaki spoza grupy
-- [ ] 3.6 Grupa Z/D daje 10 różnych znaków, a ぢ/づ pytają i odpowiadają „di”/„du” w obu kierunkach
-- [ ] 3.7 „Practice again” zachowuje grupę, „Change settings” wraca do ekranu z zachowanym wyborem
-- [ ] 3.8 Znak pomylony dwa razy pojawia się na liście „Characters to review” jeden raz, a wynik X/10 liczy oba błędy
-- [ ] 3.9 Siatka grup jest czytelna i wygodna do dotyku na iPhonie i iPadzie
-- [ ] 3.10 W Supabase Studio odpowiedzi z sesji grupy K mają `romaji` z grupy K
+- [x] 3.5 Na `/practice` wybór grupy K daje 10 pytań, każdy z pięciu znaków dokładnie 2 razy, a opcje zawierają znaki spoza grupy — 3ec86ca
+- [x] 3.6 Grupa Z/D daje 10 różnych znaków, a ぢ/づ pytają i odpowiadają „di”/„du” w obu kierunkach — 3ec86ca
+- [x] 3.7 „Practice again” zachowuje grupę, „Change settings” wraca do ekranu z zachowanym wyborem — 3ec86ca
+- [x] 3.8 Znak pomylony dwa razy pojawia się na liście „Characters to review” jeden raz, a wynik X/10 liczy oba błędy — 3ec86ca
+- [x] 3.9 Siatka grup jest czytelna i wygodna do dotyku na iPhonie i iPadzie — 3ec86ca
+- [x] 3.10 W Supabase Studio odpowiedzi z sesji grupy K mają `romaji` z grupy K — 3ec86ca
