@@ -3,7 +3,7 @@ project: HiraKana
 version: 1
 status: draft
 created: 2026-11-07
-updated: 2026-11-07
+updated: 2026-11-14
 prd_version: 1
 main_goal: low-complexity
 top_blocker: time
@@ -41,7 +41,7 @@ Użytkownikowi trudno zapamiętać znaki hiragany i katakany, a brak ich znajomo
 
 | ID   | Change ID                   | Outcome (user can …)                                                        | Prerequisites | PRD refs                                  | Status   |
 | ---- | --------------------------- | --------------------------------------------------------------------------- | ------------- | ----------------------------------------- | -------- |
-| F-01 | ci-on-main-branch           | (foundation) kontrola jakości i wdrożenie uruchamiają się na gałęzi `main`  | —             | Guardrails                                | in-progress |
+| F-01 | ci-on-main-branch           | (foundation) kontrola jakości i wdrożenie uruchamiają się na gałęzi `main`  | —             | Guardrails                                | done     |
 | S-01 | recognition-session-basic   | zalogować się e-mailem i przejść sesję rozpoznawania z informacją zwrotną   | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005 | proposed |
 | S-02 | save-session-results        | zobaczyć zapisany wynik sesji, z odpowiedziami przypisanymi do znaków       | S-01          | US-01, FR-007, FR-013                     | proposed |
 | S-03 | error-weighted-repeats      | dostawać błędne znaki częściej niż opanowane                                | S-02          | FR-006                                    | proposed |
@@ -84,7 +84,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Minimalna zmiana, ale bez niej żaden wycinek nie jest automatycznie weryfikowany; wykonanie jako pierwszej ogranicza ryzyko braku sprawdzeń przy napiętym terminie.
-- **Status:** in-progress
+- **Status:** done
 
 ## Slices
 
@@ -206,3 +206,5 @@ Foundations below assume these are present and do NOT re-scaffold them.
 ## Milestone History
 
 ## Done
+
+- **F-01: (foundation) przepływ CI (lint, sprawdzenie typów, build, smoke) uruchamia się dla gałęzi `main` i pull requestów do niej** — Archived 2026-11-14 → `context/archive/2026-11-07-ci-on-main-branch/`. Lesson: —.
