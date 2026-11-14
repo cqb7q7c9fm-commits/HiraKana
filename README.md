@@ -100,7 +100,7 @@ npx supabase start
 4. Copy the credentials printed by the CLI into your `.env` and `.dev.vars`:
 
 ```
-SUPABASE_URL=http://127.0.0.1:54321
+SUPABASE_URL=http://127.0.0.1:54421
 SUPABASE_KEY=<anon key from CLI output>
 ```
 
@@ -110,7 +110,7 @@ SUPABASE_KEY=<anon key from CLI output>
 npx supabase stop
 ```
 
-The local Studio UI is available at `http://localhost:54323`.
+The local Studio UI is available at `http://localhost:54423`.
 
 No database tables or migrations are required — this project uses Supabase Auth's built-in `auth.users` table only.
 
