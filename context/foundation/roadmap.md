@@ -45,7 +45,7 @@ Użytkownikowi trudno zapamiętać znaki hiragany i katakany, a brak ich znajomo
 | S-01 | recognition-session-basic   | zalogować się e-mailem i przejść sesję rozpoznawania z informacją zwrotną   | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005 | proposed |
 | S-02 | save-session-results        | zobaczyć zapisany wynik sesji, z odpowiedziami przypisanymi do znaków       | S-01          | US-01, FR-007, FR-013                     | proposed |
 | S-03 | error-weighted-repeats      | dostawać błędne znaki częściej niż opanowane                                | S-02          | FR-006                                    | proposed |
-| S-04 | group-practice              | ćwiczyć znaki w grupach (np. grupa K)                                       | S-01          | FR-009, FR-013                            | blocked  |
+| S-04 | group-practice              | ćwiczyć znaki w grupach (np. grupa K)                                       | S-01          | FR-009, FR-013                            | proposed |
 | S-05 | group-mastery-view          | zobaczyć opanowanie grup i siłę znajomości w 3-stopniowej skali             | S-02, S-04    | FR-010, FR-011                            | blocked  |
 | S-06 | hot-five-difficult-chars    | zobaczyć „hot-5” — 5 najtrudniejszych znaków                                | S-02          | FR-012                                    | proposed |
 
@@ -56,7 +56,7 @@ Navigation aid — groups items that share a Prerequisites chain. Canonical orde
 | Stream | Theme                 | Chain                                   | Note                                                                                  |
 | ------ | --------------------- | --------------------------------------- | ------------------------------------------------------------------------------------- |
 | A      | Sesja i zapis         | `F-01` → `S-01` → `S-02` → `S-03`       | Najkrótsza ścieżka do działającej nauki z powtórkami błędów (niska złożoność).         |
-| B      | Grupy i postęp        | `S-04` → `S-05`                         | Joins Stream A at `S-01` (S-04) and `S-02` (S-05); zablokowany do rozstrzygnięcia grup. |
+| B      | Grupy i postęp        | `S-04` → `S-05`                         | Joins Stream A at `S-01` (S-04) and `S-02` (S-05); S-04 odblokowany (grupy zdefiniowane), S-05 czeka na progi siły znajomości. |
 | C      | Najtrudniejsze znaki  | `S-06`                                  | Joins Stream A at `S-02`; mała, niezależna od grup.                                   |
 
 ## Baseline
@@ -109,8 +109,10 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Prerequisites:** S-01
 - **Parallel with:** S-04
 - **Blockers:** —
-- **Unknowns:**
-  - Definicja „wyniku sesji” widocznego dla użytkownika — Owner: user. Block: no.
+- **Decisions:**
+  - Wynik sesji (2026-11-14, zatwierdzone przez usera): liczba dobrych odpowiedzi z wszystkich (np. „12/15”) oraz lista znaków, w których użytkownik się pomylił.
+  - Statystyka znaku liczy oba kierunki nauki razem. Kierunek jest jednak zapisywany przy każdej odpowiedzi, więc rozdzielenie statystyk później nie wymaga migracji danych.
+- **Unknowns:** —
 - **Risk:** Pierwszy wycinek, który wymaga danych (dziś brak tabel); wybrany jako drugi, bo odblokowuje powtórki błędów i statystyki, a guardrail „wyniki nie giną” zaczyna się tu.
 - **Status:** proposed
 
@@ -135,10 +137,26 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Prerequisites:** S-01
 - **Parallel with:** S-02, S-03, S-06
 - **Blockers:** —
-- **Unknowns:**
-  - Definicja grup znaków (tylko wg spółgłoski? samogłoski, „n”, dakuten, kombinacje; grupy mniejsze niż sesja 10–15 znaków) — Owner: user. Block: yes.
-- **Risk:** Najbardziej niedookreślony wycinek PRD; zablokowany, aż grupy zostaną zdefiniowane, bo planowanie bez definicji grup oznaczałoby zgadywanie zakresu.
-- **Status:** blocked
+- **Decisions:**
+  - Grupy (2026-11-14, zatwierdzone przez usera): wspólne dla hiragany i katakany, każdy znak należy do dokładnie jednej grupy, zapis Hepburna. Każda grupa ma ≥ 5 znaków, więc mieści sesję 10–15 pytań (znak max 3 razy).
+    1. A: a i u e o
+    2. K: ka ki ku ke ko
+    3. S: sa shi su se so
+    4. T: ta chi tsu te to
+    5. N: na ni nu ne no
+    6. H: ha hi fu he ho
+    7. M: ma mi mu me mo
+    8. R: ra ri ru re ro
+    9. Y/W/N: ya yu yo wa wo n
+    10. G: ga gi gu ge go
+    11. Z/D: za ji zu ze zo da de do + ぢ/づ
+    12. B: ba bi bu be bo
+    13. P: pa pi pu pe po
+  - Kombinacje (kya, sha, cha …), małe っ i rozszerzone katakany (np. ティ) są poza MVP; można dodać później bez zmiany schematu.
+  - ぢ i づ zostają w MVP. Ich zapis Hepburna (ji, zu) pokrywa się z じ i ず, więc w pytaniach używają zapisu „di” i „du”, a „ji”/„zu” odnoszą się tylko do じ/ず. Dzięki temu odpowiedź jest jednoznaczna w obu kierunkach.
+- **Unknowns:** —
+- **Risk:** Zakres grup jest już rozstrzygnięty; pozostaje spiąć grupy z sesją z S-01 i z zapisem z S-02 (FR-013: powtórka liczy się do znaku i grupy, także poza trybem grupowym).
+- **Status:** proposed
 
 ### S-05: Opanowanie grup i siła znajomości
 
@@ -174,7 +192,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-01       | recognition-session-basic | Sesja rozpoznawania znaków z informacją zwrotną           | no                    | Czeka na F-01                           |
 | S-02       | save-session-results      | Zapis wyniku sesji i odpowiedzi per znak                  | no                    | Czeka na S-01                           |
 | S-03       | error-weighted-repeats    | Częstsze powtórki błędnych znaków                         | no                    | Czeka na S-02                           |
-| S-04       | group-practice            | Ćwiczenie znaków w grupach                                | no                    | Zablokowany: definicja grup znaków      |
+| S-04       | group-practice            | Ćwiczenie znaków w grupach                                | no                    | Czeka na S-01 (grupy zdefiniowane)      |
 | S-05       | group-mastery-view        | Widok opanowania grup i siły znajomości                   | no                    | Zablokowany: progi siły znajomości      |
 | S-06       | hot-five-difficult-chars  | Widok hot-5 najtrudniejszych znaków                       | no                    | Czeka na S-02                           |
 
@@ -184,11 +202,11 @@ Foundations below assume these are present and do NOT re-scaffold them.
 2. **Dostawcy logowania zewnętrznego (FR-015, nice-to-have)** — Owner: user. Block: żaden wycinek MVP.
 3. **Mierzalny cel „płynnej reakcji”** — Owner: user. Block: roadmap-wide.
 4. **Zasady doboru 3 błędnych opcji w pytaniu** — Owner: user. Block: S-01 (nie blokuje).
-5. **Definicja „wyniku sesji”** — Owner: user. Block: S-02 (nie blokuje).
+5. ~~**Definicja „wyniku sesji”**~~ — Rozstrzygnięte 2026-11-14, zob. S-02 (Decisions).
 6. **Dostępność skali siły znajomości (drugi sygnał poza kolorem)** — Owner: user. Block: S-05 (nie blokuje).
 7. **Definicja „siły znajomości”, progów skali i kryterium „grupa opanowana”** — Owner: user. Block: S-05.
-8. **Czy statystyka znaku liczy oba kierunki nauki razem, czy osobno** — Owner: user. Block: S-02, S-06 (nie blokuje).
-9. **Definicja grup znaków** — Owner: user. Block: S-04, S-05.
+8. ~~**Czy statystyka znaku liczy oba kierunki nauki razem, czy osobno**~~ — Rozstrzygnięte 2026-11-14: razem, kierunek zapisywany w odpowiedzi, zob. S-02 (Decisions).
+9. ~~**Definicja grup znaków**~~ — Rozstrzygnięte 2026-11-14, zob. S-04 (Decisions).
 10. **Ścieżka pisania — sposób oceniania kresek** — Owner: user. Block: poza kamieniem milowym.
 11. **Ścieżka pisania — źródło danych wzorcowych** — Owner: user. Block: poza kamieniem milowym.
 12. **Podpowiedź po 2 błędach** — Owner: user. Block: poza kamieniem milowym.
