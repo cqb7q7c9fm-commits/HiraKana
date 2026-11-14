@@ -9,7 +9,7 @@ main_goal: low-complexity
 top_blocker: time
 milestone_id: first-usable-recognition-trainer
 milestone_seq: 1
-milestone_status: open
+milestone_status: done
 ---
 
 # Roadmap: HiraKana
@@ -20,7 +20,7 @@ milestone_status: open
 
 ## Milestone
 
-**M-1: Pierwszy używalny trener rozpoznawania znaków** — Status: open
+**M-1: Pierwszy używalny trener rozpoznawania znaków** — Status: done
 
 - **Intent:** Użytkownik może zalogować się e-mailem, przećwiczyć znaki hiragany i katakany w sesjach rozpoznawania (oba kierunki), a aplikacja zapamiętuje jego błędy, częściej je powtarza i pokazuje postęp per grupa.
 - **Source materials:** `context/foundation/prd.md` (v1)
@@ -223,6 +223,8 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Płatności i subskrypcje** — Why parked: PRD §Non-Goals.
 
 ## Milestone History
+
+- **M-1: Pierwszy używalny trener rozpoznawania znaków** (`first-usable-recognition-trainer`) — closed 2026-11-14. Logowanie e-mailem, sesje rozpoznawania w obu kierunkach, zapis wyników, powtórki błędnych znaków, grupy, widok opanowania i hot-5 (F-01, S-01–S-06).
 
 ## Done
 
