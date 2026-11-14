@@ -1,4 +1,5 @@
 import type { CharStat } from "../types";
+// Keep the .ts extension: scripts/check-session.mjs loads this file via Node type stripping, which cannot resolve extensionless imports.
 import { KANA, KANA_GROUPS } from "./kana.ts";
 
 /** Minimum number of answers before a character is classified at all; fewer means "new". */

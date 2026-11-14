@@ -194,7 +194,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-02       | save-session-results      | Zapis wyniku sesji i odpowiedzi per znak                  | no                    | Czeka na S-01                           |
 | S-03       | error-weighted-repeats    | Częstsze powtórki błędnych znaków                         | no                    | Czeka na S-02                           |
 | S-04       | group-practice            | Ćwiczenie znaków w grupach                                | no                    | Czeka na S-01 (grupy zdefiniowane)      |
-| S-05       | group-mastery-view        | Widok opanowania grup i siły znajomości                   | no                    | Zablokowany: progi siły znajomości      |
+| S-05       | group-mastery-view        | Widok opanowania grup i siły znajomości                   | no                    | Progi rozstrzygnięte; w realizacji       |
 | S-06       | hot-five-difficult-chars  | Widok hot-5 najtrudniejszych znaków                       | no                    | Czeka na S-02                           |
 
 ## Open Roadmap Questions
@@ -204,8 +204,8 @@ Foundations below assume these are present and do NOT re-scaffold them.
 3. **Mierzalny cel „płynnej reakcji”** — Owner: user. Block: roadmap-wide.
 4. **Zasady doboru 3 błędnych opcji w pytaniu** — Owner: user. Block: S-01 (nie blokuje).
 5. ~~**Definicja „wyniku sesji”**~~ — Rozstrzygnięte 2026-11-14, zob. S-02 (Decisions).
-6. **Dostępność skali siły znajomości (drugi sygnał poza kolorem)** — Owner: user. Block: S-05 (nie blokuje).
-7. **Definicja „siły znajomości”, progów skali i kryterium „grupa opanowana”** — Owner: user. Block: S-05.
+6. ~~**Dostępność skali siły znajomości (drugi sygnał poza kolorem)**~~ — Rozstrzygnięte 2026-11-14: etykieta tekstowa + odmienny symbol + aria-label, zob. plan group-mastery-view.
+7. ~~**Definicja „siły znajomości”, progów skali i kryterium „grupa opanowana”**~~ — Rozstrzygnięte 2026-11-14: ostatnie 5 odpowiedzi, min. 3 (inaczej „Nowy”); mocny ≥80%, średni 40–79%, słaby <40%; grupa = najsłabszy znak; opanowana, gdy wszystkie znaki mocne.
 8. ~~**Czy statystyka znaku liczy oba kierunki nauki razem, czy osobno**~~ — Rozstrzygnięte 2026-11-14: razem, kierunek zapisywany w odpowiedzi, zob. S-02 (Decisions).
 9. ~~**Definicja grup znaków**~~ — Rozstrzygnięte 2026-11-14, zob. S-04 (Decisions).
 10. **Ścieżka pisania — sposób oceniania kresek** — Owner: user. Block: poza kamieniem milowym.
