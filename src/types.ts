@@ -23,3 +23,28 @@ export interface AnswerRecord {
 }
 
 export type PracticeStep = "setup" | "question" | "feedback" | "summary";
+
+/** An answer persisted for a saved practice session. */
+export interface SavedAnswer {
+  position: number;
+  romaji: string;
+  direction: Direction;
+  isCorrect: boolean;
+}
+
+/** A saved practice session as exposed to the client. */
+export interface SessionRecord {
+  id: string;
+  alphabet: Alphabet;
+  direction: Direction;
+  total: number;
+  score: number | null;
+  createdAt: string;
+  completedAt: string | null;
+}
+
+/** A session with the romaji of wrongly answered characters, in question order. */
+export interface SessionResult {
+  session: SessionRecord;
+  mistakes: string[];
+}
