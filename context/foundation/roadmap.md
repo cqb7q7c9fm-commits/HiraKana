@@ -46,7 +46,7 @@ Użytkownikowi trudno zapamiętać znaki hiragany i katakany, a brak ich znajomo
 | S-02 | save-session-results      | zobaczyć zapisany wynik sesji, z odpowiedziami przypisanymi do znaków      | S-01          | US-01, FR-007, FR-013                         | done        |
 | S-03 | error-weighted-repeats    | dostawać błędne znaki częściej niż opanowane                               | S-02          | FR-006                                        | done        |
 | S-04 | group-practice            | ćwiczyć znaki w grupach (np. grupa K)                                      | S-01          | FR-009, FR-013                                | done        |
-| S-05 | group-mastery-view        | zobaczyć opanowanie grup i siłę znajomości w 3-stopniowej skali            | S-02, S-04    | FR-010, FR-011                                | blocked     |
+| S-05 | group-mastery-view        | zobaczyć opanowanie grup i siłę znajomości w 3-stopniowej skali            | S-02, S-04    | FR-010, FR-011                                | in-progress |
 | S-06 | hot-five-difficult-chars  | zobaczyć „hot-5” — 5 najtrudniejszych znaków                               | S-02          | FR-012                                        | done        |
 
 ## Streams
@@ -171,7 +171,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
   - Definicja „siły znajomości”, progów 3-stopniowej skali i kryterium „grupa opanowana” — Owner: user. Block: yes.
   - Drugi sygnał poza kolorem dla osób z zaburzeniami widzenia barw — Owner: user. Block: no.
 - **Risk:** Najcięższy ekran MVP według rundy wyzwań PRD; zależy od grup i od nierozstrzygniętych progów, więc jest sekwencjonowany na końcu.
-- **Status:** blocked
+- **Status:** in-progress
 
 ### S-06: Hot-5 — najtrudniejsze znaki
 

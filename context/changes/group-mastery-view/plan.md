@@ -175,22 +175,22 @@ Brak migracji ani zmian danych. Po dostarczeniu zaktualizować status S-05 w roa
 
 #### Automated
 
-- [x] 1.1 Niezmienniki logiki mastery przechodzą: `npm run check:session`
-- [x] 1.2 Sprawdzenie typów przechodzi: `npx astro check`
-- [x] 1.3 Linting przechodzi: `npm run lint`
+- [x] 1.1 Niezmienniki logiki mastery przechodzą: `npm run check:session` — fdc406c
+- [x] 1.2 Sprawdzenie typów przechodzi: `npx astro check` — fdc406c
+- [x] 1.3 Linting przechodzi: `npm run lint` — fdc406c
 
 #### Manual
 
-- [x] 1.4 Progi i priorytet siły grupy w `src/lib/mastery.ts` są zgodne z regułami w planie i czytelne bez testów
+- [x] 1.4 Progi i priorytet siły grupy w `src/lib/mastery.ts` są zgodne z regułami w planie i czytelne bez testów — fdc406c
 
 ### Phase 2: Strona /mastery i wejście z dashboardu
 
 #### Automated
 
-- [ ] 2.1 Linting przechodzi: `npm run lint`
-- [ ] 2.2 Sprawdzenie typów przechodzi: `npx astro check`
-- [ ] 2.3 Build produkcyjny przechodzi: `npm run build`
-- [ ] 2.4 Smoke przechodzi na działającym serwerze: `npm run smoke`
+- [x] 2.1 Linting przechodzi: `npm run lint`
+- [x] 2.2 Sprawdzenie typów przechodzi: `npx astro check`
+- [x] 2.3 Build produkcyjny przechodzi: `npm run build`
+- [x] 2.4 Smoke przechodzi na działającym serwerze: `npm run smoke`
 
 #### Manual
 

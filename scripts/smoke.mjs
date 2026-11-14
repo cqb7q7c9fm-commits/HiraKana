@@ -69,6 +69,7 @@ const steps = [
   ["home renders", () => request("/"), { status: 200 }],
   ["dashboard redirects anonymous user", () => request("/dashboard"), { status: 302, location: "/auth/signin" }],
   ["practice redirects anonymous user", () => request("/practice"), { status: 302, location: "/auth/signin" }],
+  ["mastery redirects anonymous user", () => request("/mastery"), { status: 302, location: "/auth/signin" }],
   [
     "signup creates account",
     () => request("/api/auth/signup", { method: "POST", form: { email: emailA, password } }),

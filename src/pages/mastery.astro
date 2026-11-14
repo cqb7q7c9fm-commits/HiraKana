@@ -1,0 +1,83 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { buildGroupMastery, type Strength } from "@/lib/mastery";
+import { getCharStats } from "@/lib/services/session-store";
+
+const user = Astro.locals.user;
+const supabase = Astro.locals.supabase;
+if (!user || !supabase) {
+  return new Response("Supabase is not configured", { status: 500 });
+}
+const stats = await getCharStats(supabase);
+const groups = buildGroupMastery(stats);
+
+const STRENGTH: Record<Strength, { label: string; symbol: string; classes: string }> = {
+  strong: { label: "Strong", symbol: "▲", classes: "border-green-400/40 bg-green-500/20 text-green-200" },
+  medium: { label: "Medium", symbol: "◆", classes: "border-amber-400/40 bg-amber-500/20 text-amber-200" },
+  weak: { label: "Weak", symbol: "▼", classes: "border-red-400/40 bg-red-500/20 text-red-200" },
+  new: { label: "New", symbol: "○", classes: "border-white/20 bg-white/10 text-blue-100/80" },
+};
+const SCALE: Strength[] = ["weak", "medium", "strong", "new"];
+const markerBase =
+  "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium whitespace-nowrap";
+---
+
+<Layout title="Mastery">
+  <div class="bg-cosmic flex min-h-dvh items-start justify-center p-4">
+    <div class="w-full max-w-5xl rounded-2xl border border-white/10 bg-white/10 p-6 text-white backdrop-blur-xl sm:p-8">
+      <a href="/dashboard" class="mb-4 inline-block py-2 text-sm text-purple-300 hover:text-purple-100 hover:underline">
+        ← Back to dashboard
+      </a>
+      <h1 class="mb-4 bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-3xl font-bold text-transparent">
+        Mastery
+      </h1>
+      <ul class="mb-6 flex flex-wrap gap-2" aria-label="Strength scale">
+        {SCALE.map((key) => (
+          <li class:list={[markerBase, STRENGTH[key].classes]}>
+            <span aria-hidden="true">{STRENGTH[key].symbol}</span>
+            {STRENGTH[key].label}
+          </li>
+        ))}
+      </ul>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {groups.map((group) => {
+          const g = STRENGTH[group.strength];
+          return (
+            <section class="min-w-0 rounded-xl border border-white/10 bg-white/5 p-4">
+              <div class="mb-2 flex items-center justify-between gap-2">
+                <h2 class="text-xl font-bold">{group.label}</h2>
+                <span class:list={[markerBase, g.classes]} aria-label={`Group ${group.label}: ${g.label}`}>
+                  <span aria-hidden="true">{g.symbol}</span>
+                  {g.label}
+                </span>
+              </div>
+              <p class="mb-3 text-sm text-blue-100/80">
+                {group.strongCount}/{group.total} strong
+                {group.mastered && <span class="ml-2 font-semibold text-green-200">Mastered</span>}
+              </p>
+              <ul class="space-y-1">
+                {group.chars.map((c) => {
+                  const s = STRENGTH[c.strength];
+                  return (
+                    <li class="flex items-center justify-between gap-2 py-1">
+                      <span class="flex min-w-0 items-center gap-2">
+                        <span class="text-2xl" lang="ja">
+                          {c.hiragana} {c.katakana}
+                        </span>
+                        <span class="text-base break-words text-blue-100/80">{c.romaji}</span>
+                      </span>
+                      <span class:list={[markerBase, "shrink-0", s.classes]} aria-label={`${c.romaji}: ${s.label}`}>
+                        <span aria-hidden="true">{s.symbol}</span>
+                        {s.label}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</Layout>
