@@ -1,6 +1,7 @@
 // Session logic check: proves the kana table and buildSession() keep their invariants.
 // Zero dependencies on purpose. Imports the .ts sources directly via Node type stripping: node scripts/check-session.mjs
 import { KANA, KANA_GROUPS } from "../src/lib/kana.ts";
+import { buildGroupMastery, strengthOf } from "../src/lib/mastery.ts";
 import { buildSession, MAX_REPEATS, OPTION_COUNT, SESSION_LENGTH, weightOf } from "../src/lib/services/session.ts";
 
 const ITERATIONS = 500;
@@ -287,6 +288,60 @@ for (let i = 0; i < 50; i++) {
 }
 assert(wide.size > 10, "without a group, distractors must come from the whole alphabet");
 
+// Mastery: per-character strength thresholds.
+const st = (answers, errors) => ({ romaji: "a", answers, errors });
+assert(strengthOf(st(1, 0)) === "new", "1/1 correct must be new");
+assert(strengthOf(st(2, 0)) === "new", "2/2 correct must be new");
+assert(strengthOf(st(3, 0)) === "strong", "3/3 correct must be strong");
+assert(strengthOf(st(5, 1)) === "strong", "4/5 correct (80%) must be strong");
+assert(strengthOf(st(5, 2)) === "medium", "3/5 correct (60%) must be medium");
+assert(strengthOf(st(5, 3)) === "medium", "2/5 correct (40%) must be medium");
+assert(strengthOf(st(5, 4)) === "weak", "1/5 correct (20%) must be weak");
+assert(strengthOf(st(3, 3)) === "weak", "0/3 correct must be weak");
+assert(strengthOf(undefined) === "new", "no stat must be new");
+
+// Mastery: group aggregation.
+const statsFor = (romajis, answers, errors) => romajis.map((romaji) => ({ romaji, answers, errors }));
+const kMembers = KANA_GROUPS.find((g) => g.id === "k").members;
+const kOf = (stats) => buildGroupMastery(stats).find((g) => g.id === "k");
+
+const allStrong = kOf(statsFor(kMembers, 5, 0));
+assert(allStrong.strength === "strong" && allStrong.mastered, "all-strong group must be strong and mastered");
+assert(allStrong.strongCount === kMembers.length, "all-strong group must count every member as strong");
+
+const fourStrongOneNew = kOf(statsFor(kMembers.slice(0, 4), 5, 0));
+assert(
+  fourStrongOneNew.strength === "new" && !fourStrongOneNew.mastered,
+  "4 strong + 1 new must be new and not mastered",
+);
+assert(fourStrongOneNew.strongCount === 4, "4 strong + 1 new must have strongCount 4");
+
+const strongPlusWeak = kOf([...statsFor(kMembers.slice(0, 4), 5, 0), ...statsFor(kMembers.slice(4), 5, 4)]);
+assert(strongPlusWeak.strength === "weak" && !strongPlusWeak.mastered, "strong + one weak must be weak");
+
+const strongPlusMedium = kOf([...statsFor(kMembers.slice(0, 4), 5, 0), ...statsFor(kMembers.slice(4), 5, 2)]);
+assert(strongPlusMedium.strength === "medium", "one medium + rest strong must be medium");
+
+const noData = buildGroupMastery([]);
+assert(
+  noData.every((g) => g.strength === "new" && g.strongCount === 0 && !g.mastered),
+  "no data must give new groups with strongCount 0",
+);
+assert(noData.length === KANA_GROUPS.length, "buildGroupMastery must return one entry per group");
+assert(
+  noData.every((g, idx) => g.id === KANA_GROUPS[idx].id && g.label === KANA_GROUPS[idx].label),
+  "buildGroupMastery must keep KANA_GROUPS order",
+);
+assert(
+  noData.reduce((sum, g) => sum + g.chars.length, 0) === KANA.length,
+  "chars across mastery groups must add up to KANA.length",
+);
+const ignored = buildGroupMastery([{ romaji: "zzz", answers: 9, errors: 9 }]);
+assert(
+  ignored.every((g) => g.strength === "new"),
+  "stats for romaji outside KANA must be ignored",
+);
+
 console.log(
-  `PASS: ${KANA.length} kana rows, ${checked} sessions checked (4 modes x 2 random sources x ${ITERATIONS}), ${groupChecked} group sessions, weighted selection (errored ${hotTotal} vs error-free ${coldTotal} appearances over ${ITERATIONS} sessions)`,
+  `PASS: ${KANA.length} kana rows, ${checked} sessions checked (4 modes x 2 random sources x ${ITERATIONS}), ${groupChecked} group sessions, weighted selection (errored ${hotTotal} vs error-free ${coldTotal} appearances over ${ITERATIONS} sessions), mastery strength and group aggregation`,
 );
