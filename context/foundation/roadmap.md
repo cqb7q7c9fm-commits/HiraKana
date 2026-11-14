@@ -44,8 +44,8 @@ Użytkownikowi trudno zapamiętać znaki hiragany i katakany, a brak ich znajomo
 | F-01 | ci-on-main-branch         | (foundation) kontrola jakości i wdrożenie uruchamiają się na gałęzi `main` | —             | Guardrails                                    | done        |
 | S-01 | recognition-session-basic | zalogować się e-mailem i przejść sesję rozpoznawania z informacją zwrotną  | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005 | done |
 | S-02 | save-session-results      | zobaczyć zapisany wynik sesji, z odpowiedziami przypisanymi do znaków      | S-01          | US-01, FR-007, FR-013                         | done |
-| S-03 | error-weighted-repeats    | dostawać błędne znaki częściej niż opanowane                               | S-02          | FR-006                                        | proposed    |
-| S-04 | group-practice            | ćwiczyć znaki w grupach (np. grupa K)                                      | S-01          | FR-009, FR-013                                | proposed    |
+| S-03 | error-weighted-repeats    | dostawać błędne znaki częściej niż opanowane                               | S-02          | FR-006                                        | in-progress |
+| S-04 | group-practice            | ćwiczyć znaki w grupach (np. grupa K)                                      | S-01          | FR-009, FR-013                                | in-progress |
 | S-05 | group-mastery-view        | zobaczyć opanowanie grup i siłę znajomości w 3-stopniowej skali            | S-02, S-04    | FR-010, FR-011                                | blocked     |
 | S-06 | hot-five-difficult-chars  | zobaczyć „hot-5” — 5 najtrudniejszych znaków                               | S-02          | FR-012                                        | proposed    |
 
@@ -124,10 +124,11 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Prerequisites:** S-02
 - **Parallel with:** S-04, S-06
 - **Blockers:** —
-- **Unknowns:**
-  - Dokładna reguła „częściej” (błędny znak pojawia się więcej razy niż opanowany) — Owner: user. Block: no.
+- **Decisions:**
+  - Reguła „częściej” (2026-11-14, uzgodniona w planie): statystyka znaku z ostatnich 5 odpowiedzi (oba kierunki razem), waga = 1 + 3 × odsetek błędów. Limit powtórzeń w sesji: 3 dla znaku z błędami, 1 dla pozostałych; długość sesji stała, 10 pytań.
+- **Unknowns:** —
 - **Risk:** To główny wgląd produktu (powtórki skupione na błędach); sekwencjonowany zaraz po zapisie, bo bez historii odpowiedzi nie da się go zrealizować.
-- **Status:** proposed
+- **Status:** in-progress
 
 ### S-04: Ćwiczenie w grupach znaków
 
@@ -156,7 +157,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
   - ぢ i づ zostają w MVP. Ich zapis Hepburna (ji, zu) pokrywa się z じ i ず, więc w pytaniach używają zapisu „di” i „du”, a „ji”/„zu” odnoszą się tylko do じ/ず. Dzięki temu odpowiedź jest jednoznaczna w obu kierunkach.
 - **Unknowns:** —
 - **Risk:** Zakres grup jest już rozstrzygnięty; pozostaje spiąć grupy z sesją z S-01 i z zapisem z S-02 (FR-013: powtórka liczy się do znaku i grupy, także poza trybem grupowym).
-- **Status:** proposed
+- **Status:** in-progress
 
 ### S-05: Opanowanie grup i siła znajomości
 
