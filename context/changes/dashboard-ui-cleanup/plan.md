@@ -348,5 +348,5 @@ Phase 2 changes global token values. Rollback is reverting `global.css` and `Sub
 
 #### Manual
 
-- [x] 5.5 `/10x-impl-review dashboard-ui-cleanup` was run and every UI finding is fixed or recorded as deferred with a reason
+- [x] 5.5 `/10x-impl-review dashboard-ui-cleanup` was run and every UI finding is fixed or recorded as deferred with a reason — 09cef1c
 - [x] 5.6 The merge checklist `.claude/skills/10x-ui/references/ui-quality-checklist.md` was walked, and CI is not treated as the gate — 2d6abbd
