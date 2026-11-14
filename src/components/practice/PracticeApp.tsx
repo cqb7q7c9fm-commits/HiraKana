@@ -19,7 +19,7 @@ export default function PracticeApp() {
         syncStatus={session.syncStatus}
         sessionExpired={session.sessionExpired}
         onRetry={session.retry}
-        onPracticeAgain={session.startAgain}
+        onPracticeAgain={() => void session.startAgain()}
         onChangeSettings={session.restart}
       />
     );
@@ -43,5 +43,12 @@ export default function PracticeApp() {
     );
   }
 
-  return <SetupStep initialAlphabet={session.alphabet} initialDirection={session.direction} onStart={session.start} />;
+  return (
+    <SetupStep
+      initialAlphabet={session.alphabet}
+      initialDirection={session.direction}
+      starting={session.starting}
+      onStart={session.start}
+    />
+  );
 }

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { fetchCharStats } from "@/components/hooks/useCharStats";
 import { useAnswerSync } from "@/components/hooks/useAnswerSync";
 import { KANA } from "@/lib/kana";
 import { buildSession } from "@/lib/services/session";
@@ -13,14 +14,35 @@ export function usePracticeSession() {
   const [selected, setSelected] = useState<number | null>(null);
   const [answers, setAnswers] = useState<AnswerRecord[]>([]);
   const [result, setResult] = useState<SessionResult | null>(null);
+  const [starting, setStarting] = useState(false);
   const sync = useAnswerSync();
+
+  // Guards against double starts and against applying a start that was cancelled (restart / unmount) while awaiting stats.
+  const startingRef = useRef(false);
+  const startToken = useRef(0);
+
+  useEffect(() => {
+    const token = startToken;
+    return () => {
+      token.current++;
+    };
+  }, []);
 
   const score = answers.filter((a) => a.chosenIndex === a.question.correctIndex).length;
 
-  function start(nextAlphabet: Alphabet, nextDirection: Direction) {
+  async function start(nextAlphabet: Alphabet, nextDirection: Direction): Promise<void> {
+    if (startingRef.current) return;
+    startingRef.current = true;
+    const token = ++startToken.current;
+    setStarting(true);
+    const stats = await fetchCharStats();
+    // restart() or unmount happened while waiting: that path already reset the state, so do nothing.
+    if (token !== startToken.current) return;
+    startingRef.current = false;
+    setStarting(false);
     setAlphabet(nextAlphabet);
     setDirection(nextDirection);
-    const nextQuestions = buildSession(KANA, nextAlphabet, nextDirection);
+    const nextQuestions = buildSession(KANA, nextAlphabet, nextDirection, Math.random, stats);
     setQuestions(nextQuestions);
     setIndex(0);
     setSelected(null);
@@ -70,6 +92,9 @@ export function usePracticeSession() {
 
   /** Back to the setup screen ("Change settings"). */
   function restart() {
+    startToken.current++;
+    startingRef.current = false;
+    setStarting(false);
     sync.abort();
     setResult(null);
     setStep("setup");
@@ -80,8 +105,8 @@ export function usePracticeSession() {
   }
 
   /** New session with the same alphabet and direction ("Practice again"). */
-  function startAgain() {
-    start(alphabet, direction);
+  function startAgain(): Promise<void> {
+    return start(alphabet, direction);
   }
 
   return {
@@ -94,6 +119,7 @@ export function usePracticeSession() {
     answers,
     score,
     result,
+    starting,
     syncStatus: sync.syncStatus,
     sessionExpired: sync.sessionExpired,
     retry,

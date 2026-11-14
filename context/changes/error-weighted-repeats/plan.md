@@ -238,21 +238,21 @@ Jedna migracja dodająca indeks i funkcję; brak zmian danych, brak backfillu. W
 
 #### Automated
 
-- [x] 2.1 Migracje stosują się od zera: `npx supabase db reset`
-- [x] 2.2 Linting przechodzi: `npm run lint`
-- [x] 2.3 Sprawdzanie typów przechodzi: `npx astro check`
-- [x] 2.4 Build przechodzi: `npm run build`
-- [x] 2.5 Smoke test (z nowym endpointem i RLS) przechodzi przeciw lokalnemu Supabase: `npm run smoke`
+- [x] 2.1 Migracje stosują się od zera: `npx supabase db reset` — 3215f1b
+- [x] 2.2 Linting przechodzi: `npm run lint` — 3215f1b
+- [x] 2.3 Sprawdzanie typów przechodzi: `npx astro check` — 3215f1b
+- [x] 2.4 Build przechodzi: `npm run build` — 3215f1b
+- [x] 2.5 Smoke test (z nowym endpointem i RLS) przechodzi przeciw lokalnemu Supabase: `npm run smoke` — 3215f1b
 
 ### Phase 3: Podpięcie w kliencie z fallbackiem
 
 #### Automated
 
-- [ ] 3.1 Linting przechodzi: `npm run lint`
-- [ ] 3.2 Sprawdzanie typów przechodzi: `npx astro check`
-- [ ] 3.3 Build przechodzi: `npm run build`
-- [ ] 3.4 Skrypt logiki sesji przechodzi: `npm run check:session`
-- [ ] 3.5 Smoke test przechodzi: `npm run smoke`
+- [x] 3.1 Linting przechodzi: `npm run lint`
+- [x] 3.2 Sprawdzanie typów przechodzi: `npx astro check`
+- [x] 3.3 Build przechodzi: `npm run build`
+- [x] 3.4 Skrypt logiki sesji przechodzi: `npm run check:session`
+- [x] 3.5 Smoke test przechodzi: `npm run smoke`
 
 #### Manual
 

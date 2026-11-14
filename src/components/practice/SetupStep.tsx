@@ -7,7 +7,8 @@ import type { Alphabet, Direction } from "@/types";
 interface Props {
   initialAlphabet: Alphabet;
   initialDirection: Direction;
-  onStart: (alphabet: Alphabet, direction: Direction) => void;
+  starting: boolean;
+  onStart: (alphabet: Alphabet, direction: Direction) => void | Promise<void>;
 }
 
 const ALPHABETS: { value: Alphabet; label: string; sample: string }[] = [
@@ -60,7 +61,7 @@ function ChoiceGroup<T extends string>({ label, value, options, onChange }: Choi
   );
 }
 
-export function SetupStep({ initialAlphabet, initialDirection, onStart }: Props) {
+export function SetupStep({ initialAlphabet, initialDirection, starting, onStart }: Props) {
   const [alphabet, setAlphabet] = useState<Alphabet>(initialAlphabet);
   const [direction, setDirection] = useState<Direction>(initialDirection);
 
@@ -74,8 +75,9 @@ export function SetupStep({ initialAlphabet, initialDirection, onStart }: Props)
       <Button
         size="lg"
         className="h-14 w-full bg-purple-600 text-base text-white hover:bg-purple-500"
+        disabled={starting}
         onClick={() => {
-          onStart(alphabet, direction);
+          void onStart(alphabet, direction);
         }}
       >
         <Play />
