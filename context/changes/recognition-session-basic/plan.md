@@ -267,12 +267,12 @@ Nie dotyczy: brak zmian w bazie i w istniejących danych. S-02 doda wysyłanie o
 
 #### Automated
 
-- [x] 3.1 Smoke przechodzi na działającym serwerze: `npm run smoke`
-- [x] 3.2 Build produkcyjny przechodzi: `npm run build`
-- [x] 3.3 Linting i typy przechodzą: `npm run lint && npx astro check`
+- [x] 3.1 Smoke przechodzi na działającym serwerze: `npm run smoke` — aa455bd
+- [x] 3.2 Build produkcyjny przechodzi: `npm run build` — aa455bd
+- [x] 3.3 Linting i typy przechodzą: `npm run lint && npx astro check` — aa455bd
 
 #### Manual
 
-- [x] 3.4 Na szerokości iPhone’a (≈390 px) strona `/practice` nie ma poziomego przewijania, a przyciski opcji są wygodne do trafienia kciukiem
-- [x] 3.5 Na szerokości iPada (≈820 px) układ jest czytelny, a znak w pytaniu wyraźnie duży
-- [x] 3.6 Niezalogowany użytkownik wchodzący na `/practice` trafia na `/auth/signin`
+- [x] 3.4 Na szerokości iPhone’a (≈390 px) strona `/practice` nie ma poziomego przewijania, a przyciski opcji są wygodne do trafienia kciukiem — aa455bd
+- [x] 3.5 Na szerokości iPada (≈820 px) układ jest czytelny, a znak w pytaniu wyraźnie duży — aa455bd
+- [x] 3.6 Niezalogowany użytkownik wchodzący na `/practice` trafia na `/auth/signin` — aa455bd
