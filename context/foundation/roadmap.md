@@ -45,7 +45,7 @@ Użytkownikowi trudno zapamiętać znaki hiragany i katakany, a brak ich znajomo
 | S-01 | recognition-session-basic | zalogować się e-mailem i przejść sesję rozpoznawania z informacją zwrotną  | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005 | done        |
 | S-02 | save-session-results      | zobaczyć zapisany wynik sesji, z odpowiedziami przypisanymi do znaków      | S-01          | US-01, FR-007, FR-013                         | done        |
 | S-03 | error-weighted-repeats    | dostawać błędne znaki częściej niż opanowane                               | S-02          | FR-006                                        | done        |
-| S-04 | group-practice            | ćwiczyć znaki w grupach (np. grupa K)                                      | S-01          | FR-009, FR-013                                | in-progress |
+| S-04 | group-practice            | ćwiczyć znaki w grupach (np. grupa K)                                      | S-01          | FR-009, FR-013                                | done        |
 | S-05 | group-mastery-view        | zobaczyć opanowanie grup i siłę znajomości w 3-stopniowej skali            | S-02, S-04    | FR-010, FR-011                                | blocked     |
 | S-06 | hot-five-difficult-chars  | zobaczyć „hot-5” — 5 najtrudniejszych znaków                               | S-02          | FR-012                                        | done        |
 
@@ -157,7 +157,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
   - ぢ i づ zostają w MVP. Ich zapis Hepburna (ji, zu) pokrywa się z じ i ず, więc w pytaniach używają zapisu „di” i „du”, a „ji”/„zu” odnoszą się tylko do じ/ず. Dzięki temu odpowiedź jest jednoznaczna w obu kierunkach.
 - **Unknowns:** —
 - **Risk:** Zakres grup jest już rozstrzygnięty; pozostaje spiąć grupy z sesją z S-01 i z zapisem z S-02 (FR-013: powtórka liczy się do znaku i grupy, także poza trybem grupowym).
-- **Status:** in-progress
+- **Status:** done
 
 ### S-05: Opanowanie grup i siła znajomości
 
@@ -231,3 +231,4 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **S-02: user can zobaczyć zapisany wynik sesji; każda odpowiedź jest przypisana do znaku, także błędna (zgodnie z US-01).** — Archived 2026-11-14 → `context/archive/2026-11-14-save-session-results/`. Lesson: —.
 - **S-03: user can dostawać w sesji znaki, w których się mylił, częściej niż znaki opanowane.** — Archived 2026-11-14 → `context/archive/2026-11-14-error-weighted-repeats/`. Lesson: —.
 - **S-06: user can zobaczyć 5 znaków, w których myli się najczęściej.** — Archived 2026-11-14 → `context/archive/2026-11-14-hot-five-difficult-chars/`. Lesson: —.
+- **S-04: user can ćwiczyć znaki w grupach (np. grupa K: ka, ki, ku, ke, ko); powtórki liczą się i do znaku, i do grupy.** — Archived 2026-11-14 → `context/archive/2026-11-14-group-practice/`. Lesson: —.
