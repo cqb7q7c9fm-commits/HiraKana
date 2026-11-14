@@ -35,6 +35,13 @@ for (const key of ["romaji", "hiragana", "katakana"]) {
   );
   assert(new Set(values).size === KANA.length, `KANA.${key} values are not unique`);
 }
+// Pairing: each katakana is its hiragana shifted by 0x60 code points (U+3042 あ -> U+30A2 ア).
+for (const e of KANA) {
+  assert(
+    e.katakana.codePointAt(0) === e.hiragana.codePointAt(0) + 0x60,
+    `KANA pairing mismatch for "${e.romaji}": ${e.hiragana} / ${e.katakana}`,
+  );
+}
 
 // Session
 const alphabets = ["hiragana", "katakana"];

@@ -4,8 +4,11 @@ import PracticeApp from "@/components/practice/PracticeApp";
 ---
 
 <Layout title="Practice">
-  <div class="bg-cosmic flex min-h-screen items-start justify-center p-4 sm:items-center">
+  <div class="bg-cosmic flex min-h-dvh items-start justify-center p-4 sm:items-center">
     <div class="w-full max-w-xl rounded-2xl border border-white/10 bg-white/10 p-6 text-white backdrop-blur-xl sm:p-8">
+      <a href="/dashboard" class="mb-4 inline-block py-2 text-sm text-purple-300 hover:text-purple-100 hover:underline">
+        ← Back to dashboard
+      </a>
       <PracticeApp client:load />
     </div>
   </div>

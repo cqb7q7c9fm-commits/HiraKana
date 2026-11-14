@@ -1,4 +1,6 @@
+import { useEffect, useRef } from "react";
 import { ArrowRight, Check, X } from "lucide-react";
+import { useFocusOnChange } from "@/components/hooks/useFocusOnChange";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Alphabet, Direction, Question } from "@/types";
@@ -21,22 +23,30 @@ export function QuestionStep({ question, index, total, direction, alphabet, sele
   const optionsAreKana = direction === "romaji-to-kana";
   const isLast = index + 1 >= total;
   const correctText = question.options[question.correctIndex];
-  const pair = `${question.entry[alphabet]} = ${question.entry.romaji}`;
+
+  // New question -> focus the progress + prompt; after answering -> focus "Next".
+  const headingRef = useFocusOnChange<HTMLDivElement>(index);
+  const nextRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (answered) nextRef.current?.focus();
+  }, [answered]);
 
   return (
     <div className="space-y-6">
-      <p className="text-center text-sm font-medium text-blue-100/70">
-        {index + 1} / {total}
-      </p>
-      <p
-        className={cn(
-          "text-center font-bold text-white",
-          promptIsKana ? "text-7xl leading-tight" : "text-6xl leading-tight",
-        )}
-        lang={promptIsKana ? "ja" : undefined}
-      >
-        {question.prompt}
-      </p>
+      <div ref={headingRef} tabIndex={-1} className="space-y-6 outline-none">
+        <p className="text-center text-sm font-medium text-blue-100/70">
+          {index + 1} / {total}
+        </p>
+        <p
+          className={cn(
+            "text-center font-bold text-white",
+            promptIsKana ? "text-7xl leading-tight" : "text-6xl leading-tight",
+          )}
+          lang={promptIsKana ? "ja" : undefined}
+        >
+          {question.prompt}
+        </p>
+      </div>
 
       <div className="grid grid-cols-2 gap-3">
         {question.options.map((option, i) => {
@@ -76,7 +86,8 @@ export function QuestionStep({ question, index, total, direction, alphabet, sele
               {isCorrect ? "Correct" : "Incorrect"}
             </p>
             <p className="text-blue-100/80">
-              <span lang="ja">{pair}</span>
+              <span lang="ja">{question.entry[alphabet]}</span>
+              {` = ${question.entry.romaji}`}
               <span className="sr-only"> (correct answer: {correctText})</span>
             </p>
           </>
@@ -85,6 +96,7 @@ export function QuestionStep({ question, index, total, direction, alphabet, sele
 
       {answered ? (
         <Button
+          ref={nextRef}
           size="lg"
           className="h-14 w-full bg-purple-600 text-base text-white hover:bg-purple-500"
           onClick={onNext}

@@ -1,4 +1,5 @@
 import { RotateCcw, Settings } from "lucide-react";
+import { useFocusOnChange } from "@/components/hooks/useFocusOnChange";
 import { Button } from "@/components/ui/button";
 import type { Alphabet, AnswerRecord } from "@/types";
 
@@ -13,11 +14,16 @@ interface Props {
 
 export function SummaryStep({ alphabet, score, total, answers, onPracticeAgain, onChangeSettings }: Props) {
   const wrong = answers.filter((a) => a.chosenIndex !== a.question.correctIndex);
+  const headingRef = useFocusOnChange<HTMLHeadingElement>(true);
 
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-3xl font-bold text-transparent">
+        <h1
+          ref={headingRef}
+          tabIndex={-1}
+          className="bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-3xl font-bold text-transparent outline-none"
+        >
           Session complete
         </h1>
         <p className="mt-3 text-5xl font-bold text-white">

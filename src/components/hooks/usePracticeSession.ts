@@ -26,7 +26,8 @@ export function usePracticeSession() {
 
   function answer(optionIndex: number) {
     if (step !== "question" || selected !== null) return;
-    const question = questions[index];
+    const question = questions[index] as Question | undefined;
+    if (!question) return;
     setSelected(optionIndex);
     setAnswers((prev) => [...prev, { question, chosenIndex: optionIndex }]);
     setStep("feedback");
