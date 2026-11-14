@@ -291,23 +291,23 @@ Phase 2 changes global token values. Rollback is reverting `global.css` and `Sub
 
 #### Automated
 
-- [x] 1.1 `src/components/ui/card.tsx` exists and `git diff --stat package.json package-lock.json` is empty
-- [x] 1.2 Hard-coded scan on `src/components/ui/card.tsx` returns 0 lines
-- [x] 1.3 Linting and type checks pass: `npm run lint` and `npx astro check`
+- [x] 1.1 `src/components/ui/card.tsx` exists and `git diff --stat package.json package-lock.json` is empty — 1713c98
+- [x] 1.2 Hard-coded scan on `src/components/ui/card.tsx` returns 0 lines — 1713c98
+- [x] 1.3 Linting and type checks pass: `npm run lint` and `npx astro check` — 1713c98
 
 ### Phase 2: Token values — cosmic `:root`, `bg-cosmic` from tokens
 
 #### Automated
 
-- [ ] 2.1 `context/changes/dashboard-ui-cleanup/tokens.md` exists and `global.css` contains a `Source:` comment next to the token block
-- [ ] 2.2 `@utility bg-cosmic` body contains no hex literal (grep of its lines for `#[0-9a-fA-F]{3,8}` returns 0)
-- [ ] 2.3 Hard-coded scan on `src/components/auth/SubmitButton.tsx` returns 0 lines
-- [ ] 2.4 Linting, types and build pass: `npm run lint`, `npx astro check`, `npm run build`
+- [x] 2.1 `context/changes/dashboard-ui-cleanup/tokens.md` exists and `global.css` contains a `Source:` comment next to the token block
+- [x] 2.2 `@utility bg-cosmic` body contains no hex literal (grep of its lines for `#[0-9a-fA-F]{3,8}` returns 0)
+- [x] 2.3 Hard-coded scan on `src/components/auth/SubmitButton.tsx` returns 0 lines
+- [x] 2.4 Linting, types and build pass: `npm run lint`, `npx astro check`, `npm run build`
 
 #### Manual
 
-- [ ] 2.5 Desktop and 390 px screenshots (before/after) of `/auth/signin`, `/auth/signup` and `/practice` show the same look to within the explained difference
-- [ ] 2.6 The cosmic gradient background on `/`, `/mastery` and `/results` looks unchanged to the eye
+- [x] 2.5 Desktop and 390 px screenshots (before/after) of `/auth/signin`, `/auth/signup` and `/practice` show the same look to within the explained difference
+- [x] 2.6 The cosmic gradient background on `/`, `/mastery` and `/results` looks unchanged to the eye
 
 ### Phase 3: View — dashboard from tokens and components
 
