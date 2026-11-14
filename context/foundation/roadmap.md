@@ -42,12 +42,12 @@ Użytkownikowi trudno zapamiętać znaki hiragany i katakany, a brak ich znajomo
 | ID   | Change ID                 | Outcome (user can …)                                                       | Prerequisites | PRD refs                                      | Status      |
 | ---- | ------------------------- | -------------------------------------------------------------------------- | ------------- | --------------------------------------------- | ----------- |
 | F-01 | ci-on-main-branch         | (foundation) kontrola jakości i wdrożenie uruchamiają się na gałęzi `main` | —             | Guardrails                                    | done        |
-| S-01 | recognition-session-basic | zalogować się e-mailem i przejść sesję rozpoznawania z informacją zwrotną  | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005 | done |
-| S-02 | save-session-results      | zobaczyć zapisany wynik sesji, z odpowiedziami przypisanymi do znaków      | S-01          | US-01, FR-007, FR-013                         | done |
+| S-01 | recognition-session-basic | zalogować się e-mailem i przejść sesję rozpoznawania z informacją zwrotną  | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005 | done        |
+| S-02 | save-session-results      | zobaczyć zapisany wynik sesji, z odpowiedziami przypisanymi do znaków      | S-01          | US-01, FR-007, FR-013                         | done        |
 | S-03 | error-weighted-repeats    | dostawać błędne znaki częściej niż opanowane                               | S-02          | FR-006                                        | done        |
 | S-04 | group-practice            | ćwiczyć znaki w grupach (np. grupa K)                                      | S-01          | FR-009, FR-013                                | in-progress |
 | S-05 | group-mastery-view        | zobaczyć opanowanie grup i siłę znajomości w 3-stopniowej skali            | S-02, S-04    | FR-010, FR-011                                | blocked     |
-| S-06 | hot-five-difficult-chars  | zobaczyć „hot-5” — 5 najtrudniejszych znaków                               | S-02          | FR-012                                        | proposed    |
+| S-06 | hot-five-difficult-chars  | zobaczyć „hot-5” — 5 najtrudniejszych znaków                               | S-02          | FR-012                                        | in-progress |
 
 ## Streams
 
@@ -183,7 +183,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Mały, samodzielny widok oparty na statystykach per znak z S-02; po stronie ryzyka — na początku lista jest przypadkowa przy małej liczbie odpowiedzi.
-- **Status:** proposed
+- **Status:** in-progress
 
 ## Backlog Handoff
 
