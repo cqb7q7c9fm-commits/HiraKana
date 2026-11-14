@@ -1,10 +1,10 @@
 ---
 change_id: recognition-session-basic
 title: Sesja rozpoznawania znaków z informacją zwrotną
-status: impl_reviewed
+status: archived
 created: 2026-11-14
 updated: 2026-11-14
-archived_at: null
+archived_at: 2026-11-14T15:07:48Z
 ---
 
 ## Notes
