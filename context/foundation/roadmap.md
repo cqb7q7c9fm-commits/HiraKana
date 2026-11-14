@@ -39,15 +39,15 @@ Użytkownikowi trudno zapamiętać znaki hiragany i katakany, a brak ich znajomo
 
 ## At a glance
 
-| ID   | Change ID                   | Outcome (user can …)                                                        | Prerequisites | PRD refs                                  | Status   |
-| ---- | --------------------------- | --------------------------------------------------------------------------- | ------------- | ----------------------------------------- | -------- |
-| F-01 | ci-on-main-branch           | (foundation) kontrola jakości i wdrożenie uruchamiają się na gałęzi `main`  | —             | Guardrails                                | done     |
-| S-01 | recognition-session-basic   | zalogować się e-mailem i przejść sesję rozpoznawania z informacją zwrotną   | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005 | proposed |
-| S-02 | save-session-results        | zobaczyć zapisany wynik sesji, z odpowiedziami przypisanymi do znaków       | S-01          | US-01, FR-007, FR-013                     | proposed |
-| S-03 | error-weighted-repeats      | dostawać błędne znaki częściej niż opanowane                                | S-02          | FR-006                                    | proposed |
-| S-04 | group-practice              | ćwiczyć znaki w grupach (np. grupa K)                                       | S-01          | FR-009, FR-013                            | proposed |
-| S-05 | group-mastery-view          | zobaczyć opanowanie grup i siłę znajomości w 3-stopniowej skali             | S-02, S-04    | FR-010, FR-011                            | blocked  |
-| S-06 | hot-five-difficult-chars    | zobaczyć „hot-5” — 5 najtrudniejszych znaków                                | S-02          | FR-012                                    | proposed |
+| ID   | Change ID                 | Outcome (user can …)                                                       | Prerequisites | PRD refs                                      | Status      |
+| ---- | ------------------------- | -------------------------------------------------------------------------- | ------------- | --------------------------------------------- | ----------- |
+| F-01 | ci-on-main-branch         | (foundation) kontrola jakości i wdrożenie uruchamiają się na gałęzi `main` | —             | Guardrails                                    | done        |
+| S-01 | recognition-session-basic | zalogować się e-mailem i przejść sesję rozpoznawania z informacją zwrotną  | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005 | done |
+| S-02 | save-session-results      | zobaczyć zapisany wynik sesji, z odpowiedziami przypisanymi do znaków      | S-01          | US-01, FR-007, FR-013                         | in-progress |
+| S-03 | error-weighted-repeats    | dostawać błędne znaki częściej niż opanowane                               | S-02          | FR-006                                        | proposed    |
+| S-04 | group-practice            | ćwiczyć znaki w grupach (np. grupa K)                                      | S-01          | FR-009, FR-013                                | proposed    |
+| S-05 | group-mastery-view        | zobaczyć opanowanie grup i siłę znajomości w 3-stopniowej skali            | S-02, S-04    | FR-010, FR-011                                | blocked     |
+| S-06 | hot-five-difficult-chars  | zobaczyć „hot-5” — 5 najtrudniejszych znaków                               | S-02          | FR-012                                        | proposed    |
 
 ## Streams
 
@@ -99,7 +99,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Zasady doboru 3 błędnych opcji (losowe czy podobne znaki) — Owner: user. Block: no.
 - **Risk:** Najmniejszy kompletny przepływ; logowanie e-mailem już istnieje w stanie bazowym, więc wycinek je tylko spina z sesją. Bez zapisu wyników, aby zmieścić się w terminie.
-- **Status:** proposed
+- **Status:** done
 
 ### S-02: Zapisany wynik sesji
 
@@ -114,7 +114,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
   - Statystyka znaku liczy oba kierunki nauki razem. Kierunek jest jednak zapisywany przy każdej odpowiedzi, więc rozdzielenie statystyk później nie wymaga migracji danych.
 - **Unknowns:** —
 - **Risk:** Pierwszy wycinek, który wymaga danych (dziś brak tabel); wybrany jako drugi, bo odblokowuje powtórki błędów i statystyki, a guardrail „wyniki nie giną” zaczyna się tu.
-- **Status:** proposed
+- **Status:** in-progress
 
 ### S-03: Częstsze powtórki błędnych znaków
 
@@ -226,3 +226,4 @@ Foundations below assume these are present and do NOT re-scaffold them.
 ## Done
 
 - **F-01: (foundation) przepływ CI (lint, sprawdzenie typów, build, smoke) uruchamia się dla gałęzi `main` i pull requestów do niej** — Archived 2026-11-14 → `context/archive/2026-11-07-ci-on-main-branch/`. Lesson: —.
+- **S-01: user can zalogować się e-mailem, wybrać alfabet (hiragana lub katakana) i kierunek nauki, przejść sesję 10–15 znaków z 4 opcjami odpowiedzi i po każdej odpowiedzi zobaczyć, czy była dobra.** — Archived 2026-11-14 → `context/archive/2026-11-14-recognition-session-basic/`. Lesson: —.
