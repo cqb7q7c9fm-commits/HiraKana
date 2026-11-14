@@ -190,6 +190,11 @@ const steps = [
     () => userB.request(api),
     { status: 200, body: (b) => Array.isArray(b) && b.length === 0 },
   ],
+  ["results redirects anonymous user", () => anon.request("/results"), { status: 302, location: "/auth/signin" }],
+  ["results renders for signed-in user", () => userA.request("/results"), { status: 200 }],
+  ["user A opens own result detail", () => userA.request(`/results/${sessionId}`), { status: 200 }],
+  ["user B cannot open A's result detail", () => userB.request(`/results/${sessionId}`), { status: 404 }],
+  ["unknown result id is 404", () => userA.request("/results/not-a-session"), { status: 404 }],
   ["signout clears session", () => request("/api/auth/signout", { method: "POST" }), { status: 302, location: "/" }],
   ["dashboard redirects after signout", () => request("/dashboard"), { status: 302, location: "/auth/signin" }],
 ];

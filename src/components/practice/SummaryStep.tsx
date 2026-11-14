@@ -97,6 +97,11 @@ export function SummaryStep({
           Change settings
         </Button>
       </div>
+      <p className="text-center">
+        <a href="/results" className="text-sm text-purple-300 transition-colors hover:text-purple-100 hover:underline">
+          View history
+        </a>
+      </p>
     </div>
   );
 }

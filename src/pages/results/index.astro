@@ -1,0 +1,57 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { createClient } from "@/lib/supabase";
+import { listResults } from "@/lib/services/session-store";
+import { formatSessionDate, DIRECTION_LABELS, ALPHABET_LABELS } from "@/lib/results-format";
+
+const user = Astro.locals.user;
+const supabase = createClient(Astro.request.headers, Astro.cookies);
+const sessions = user && supabase ? await listResults(supabase, user.id) : [];
+---
+
+<Layout title="Results">
+  <div class="bg-cosmic flex min-h-dvh items-start justify-center p-4 sm:items-center">
+    <div class="w-full max-w-xl rounded-2xl border border-white/10 bg-white/10 p-6 text-white backdrop-blur-xl sm:p-8">
+      <a href="/dashboard" class="mb-4 inline-block py-2 text-sm text-purple-300 hover:text-purple-100 hover:underline">
+        ← Back to dashboard
+      </a>
+      <h1 class="mb-6 bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-3xl font-bold text-transparent">
+        Results
+      </h1>
+      {sessions.length === 0 ? (
+        <div class="text-center">
+          <p class="text-blue-100/80">No completed sessions yet.</p>
+          <a
+            href="/practice"
+            class="mt-4 inline-flex items-center justify-center rounded-lg bg-purple-600 px-6 py-3 text-base font-medium text-white transition-colors hover:bg-purple-500"
+          >
+            Start practice
+          </a>
+        </div>
+      ) : (
+        <ul class="space-y-2">
+          {sessions.map((session) => (
+            <li>
+              <a
+                href={`/results/${session.id}`}
+                class="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 transition-colors hover:bg-white/10"
+              >
+                <span class="min-w-0">
+                  <span class="block text-sm text-blue-100/70">
+                    {formatSessionDate(session.completedAt ?? session.createdAt)}
+                  </span>
+                  <span class="block break-words">
+                    {ALPHABET_LABELS[session.alphabet]} · {DIRECTION_LABELS[session.direction]}
+                  </span>
+                </span>
+                <span class="shrink-0 text-2xl font-bold">
+                  {session.score ?? 0}/{session.total}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </div>
+</Layout>

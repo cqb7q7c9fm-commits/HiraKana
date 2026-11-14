@@ -285,29 +285,29 @@ Pierwsza migracja w repozytorium; baza jest dziś pusta, więc brak danych do mi
 
 #### Automated
 
-- [x] 3.1 Niezmienniki sesji nadal przechodzą: `npm run check:session`
-- [x] 3.2 Linting przechodzi: `npm run lint`
-- [x] 3.3 Sprawdzenie typów przechodzi: `npx astro check`
-- [x] 3.4 Build produkcyjny przechodzi: `npm run build`
+- [x] 3.1 Niezmienniki sesji nadal przechodzą: `npm run check:session` — 73be8e9
+- [x] 3.2 Linting przechodzi: `npm run lint` — 73be8e9
+- [x] 3.3 Sprawdzenie typów przechodzi: `npx astro check` — 73be8e9
+- [x] 3.4 Build produkcyjny przechodzi: `npm run build` — 73be8e9
 
 #### Manual
 
-- [x] 3.5 Po pełnej sesji w Supabase Studio jest 10 odpowiedzi z poprawnymi `romaji`, kierunkiem i `is_correct` oraz sesja z `completed_at` i `score`
-- [x] 3.6 Błędna odpowiedź ma w bazie `is_correct = false` i pojawia się na liście pomyłek w podsumowaniu
-- [x] 3.7 Odłączenie sieci w trakcie sesji nie blokuje nauki, baner pokazuje „Not saved”, a po przywróceniu sieci i „Retry” zapisują się wszystkie odpowiedzi (bez duplikatów)
-- [x] 3.8 Odświeżenie strony w połowie sesji zostawia sesję nieukończoną (`completed_at` pusty), a dotychczasowe odpowiedzi są w bazie
+- [x] 3.5 Po pełnej sesji w Supabase Studio jest 10 odpowiedzi z poprawnymi `romaji`, kierunkiem i `is_correct` oraz sesja z `completed_at` i `score` — 73be8e9
+- [x] 3.6 Błędna odpowiedź ma w bazie `is_correct = false` i pojawia się na liście pomyłek w podsumowaniu — 73be8e9
+- [x] 3.7 Odłączenie sieci w trakcie sesji nie blokuje nauki, baner pokazuje „Not saved”, a po przywróceniu sieci i „Retry” zapisują się wszystkie odpowiedzi (bez duplikatów) — 73be8e9
+- [x] 3.8 Odświeżenie strony w połowie sesji zostawia sesję nieukończoną (`completed_at` pusty), a dotychczasowe odpowiedzi są w bazie — 73be8e9
 
 ### Phase 4: Historia wyników
 
 #### Automated
 
-- [ ] 4.1 Smoke przechodzi na działającym serwerze: `npm run smoke`
-- [ ] 4.2 Build produkcyjny przechodzi: `npm run build`
-- [ ] 4.3 Linting i typy przechodzą: `npm run lint && npx astro check`
+- [x] 4.1 Smoke przechodzi na działającym serwerze: `npm run smoke`
+- [x] 4.2 Build produkcyjny przechodzi: `npm run build`
+- [x] 4.3 Linting i typy przechodzą: `npm run lint && npx astro check`
 
 #### Manual
 
-- [ ] 4.4 Lista pokazuje ukończone sesje od najnowszej, a nieukończone się nie pojawiają
-- [ ] 4.5 Szczegół sesji pokazuje wynik i pomyłki zgodne z tym, co widział użytkownik po sesji
-- [ ] 4.6 Na szerokości iPhone’a (≈390 px) i iPada (≈820 px) strony nie mają poziomego przewijania
-- [ ] 4.7 Drugie konto nie widzi sesji pierwszego (ani na liście, ani przez bezpośredni adres)
+- [x] 4.4 Lista pokazuje ukończone sesje od najnowszej, a nieukończone się nie pojawiają
+- [x] 4.5 Szczegół sesji pokazuje wynik i pomyłki zgodne z tym, co widział użytkownik po sesji
+- [x] 4.6 Na szerokości iPhone’a (≈390 px) i iPada (≈820 px) strony nie mają poziomego przewijania
+- [x] 4.7 Drugie konto nie widzi sesji pierwszego (ani na liście, ani przez bezpośredni adres)
