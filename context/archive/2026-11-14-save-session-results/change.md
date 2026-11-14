@@ -1,10 +1,10 @@
 ---
 change_id: save-session-results
 title: Save session results
-status: impl_reviewed
+status: archived
 created: 2026-11-14
 updated: 2026-11-14
-archived_at: null
+archived_at: 2026-11-14T18:14:53Z
 ---
 
 ## Notes
