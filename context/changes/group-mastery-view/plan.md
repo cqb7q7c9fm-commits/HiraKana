@@ -187,16 +187,16 @@ Brak migracji ani zmian danych. Po dostarczeniu zaktualizować status S-05 w roa
 
 #### Automated
 
-- [x] 2.1 Linting przechodzi: `npm run lint` — 873d312
-- [x] 2.2 Sprawdzenie typów przechodzi: `npx astro check` — 873d312
-- [x] 2.3 Build produkcyjny przechodzi: `npm run build` — 873d312
-- [x] 2.4 Smoke przechodzi na działającym serwerze: `npm run smoke` — 873d312
+- [x] 2.1 Linting przechodzi: `npm run lint` — 873d312 — b61b69a
+- [x] 2.2 Sprawdzenie typów przechodzi: `npx astro check` — 873d312 — b61b69a
+- [x] 2.3 Build produkcyjny przechodzi: `npm run build` — 873d312 — b61b69a
+- [x] 2.4 Smoke przechodzi na działającym serwerze: `npm run smoke` — 873d312 — b61b69a
 
 #### Manual
 
-- [x] 2.5 Nowy użytkownik bez odpowiedzi widzi 13 grup w stanie „New” i „0/N strong” — 873d312
-- [x] 2.6 Po sesji grupy K z 5/5 poprawnymi w oknie, K jest „Strong” i „Mastered”, a pozostałe grupy „New” — 873d312
-- [x] 2.7 Znak z 2 błędami w ostatnich 3 odpowiedziach jest „Weak”, a jego grupa „Weak” nawet gdy reszta jest mocna — 873d312
-- [x] 2.8 Skala jest odróżnialna bez koloru (etykieta i symbol widoczne w skali szarości) — 873d312
-- [x] 2.9 Na `/dashboard` widać link „Mastery” prowadzący do `/mastery`, a „Back to dashboard” wraca — 873d312
-- [x] 2.10 Strona jest czytelna i dotykalna na iPhonie/iPadzie w Safari (≈375 px i ≈820 px, bez poziomego scrolla)
+- [x] 2.5 Nowy użytkownik bez odpowiedzi widzi 13 grup w stanie „New” i „0/N strong” — 873d312 — b61b69a
+- [x] 2.6 Po sesji grupy K z 5/5 poprawnymi w oknie, K jest „Strong” i „Mastered”, a pozostałe grupy „New” — 873d312 — b61b69a
+- [x] 2.7 Znak z 2 błędami w ostatnich 3 odpowiedziach jest „Weak”, a jego grupa „Weak” nawet gdy reszta jest mocna — 873d312 — b61b69a
+- [x] 2.8 Skala jest odróżnialna bez koloru (etykieta i symbol widoczne w skali szarości) — 873d312 — b61b69a
+- [x] 2.9 Na `/dashboard` widać link „Mastery” prowadzący do `/mastery`, a „Back to dashboard” wraca — 873d312 — b61b69a
+- [x] 2.10 Strona jest czytelna i dotykalna na iPhonie/iPadzie w Safari (≈375 px i ≈820 px, bez poziomego scrolla) — b61b69a
