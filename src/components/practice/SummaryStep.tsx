@@ -15,6 +15,7 @@ interface Props {
   syncStatus: SyncStatus;
   sessionExpired: boolean;
   onRetry: () => void;
+  starting?: boolean;
   onPracticeAgain: () => void;
   onChangeSettings: () => void;
 }
@@ -28,6 +29,7 @@ export function SummaryStep({
   syncStatus,
   sessionExpired,
   onRetry,
+  starting = false,
   onPracticeAgain,
   onChangeSettings,
 }: Props) {
@@ -82,6 +84,7 @@ export function SummaryStep({
         <Button
           size="lg"
           className="h-14 flex-1 bg-purple-600 text-base text-white hover:bg-purple-500"
+          disabled={starting}
           onClick={onPracticeAgain}
         >
           <RotateCcw />

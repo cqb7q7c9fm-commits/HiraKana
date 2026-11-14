@@ -19,6 +19,7 @@ export default function PracticeApp() {
         syncStatus={session.syncStatus}
         sessionExpired={session.sessionExpired}
         onRetry={session.retry}
+        starting={session.starting}
         onPracticeAgain={() => void session.startAgain()}
         onChangeSettings={session.restart}
       />

@@ -8,5 +8,5 @@ export const GET: APIRoute = withErrors(async (context) => {
   const auth = requireUser(context);
   if (auth instanceof Response) return auth;
 
-  return json(await getCharStats(auth.supabase, auth.userId));
+  return json(await getCharStats(auth.supabase));
 });

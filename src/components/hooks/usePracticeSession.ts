@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { fetchCharStats } from "@/components/hooks/useCharStats";
+import { fetchCharStats } from "@/components/hooks/charStats";
 import { useAnswerSync } from "@/components/hooks/useAnswerSync";
 import { KANA } from "@/lib/kana";
 import { buildSession } from "@/lib/services/session";
